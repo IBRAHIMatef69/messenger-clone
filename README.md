@@ -1,10 +1,10 @@
-# store_user
+# messenger clone
 
 A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Fuuly functionaly messenger clone with firebase as a database.
 
 A few resources to get you started if this is your first Flutter project:
 
