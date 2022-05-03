@@ -93,9 +93,4 @@ class ChatBuble extends StatelessWidget {
     );
   }
 
-  String prettyDuration(Duration d) {
-    var min = d.inMinutes < 10 ? "0${d.inMinutes}" : d.inMinutes.toString();
-    var sec = d.inSeconds < 10 ? "0${d.inSeconds}" : d.inSeconds.toString();
-    return min + ":" + sec;
-  }
 }

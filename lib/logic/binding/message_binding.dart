@@ -5,7 +5,7 @@ class MessagesBinding extends Bindings{
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.put(MessagesController() ,permanent: false);
+    Get.put(MessagesController() );
   }
 
 }
