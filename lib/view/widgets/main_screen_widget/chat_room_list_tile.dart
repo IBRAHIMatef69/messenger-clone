@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:store_user/model/user_model.dart';
 import 'package:store_user/routes/routes.dart';
 import '../../../logic/controller/chat_rooms_controller.dart';
+import '../../../utils/constants.dart';
 
 class ChatRoomListTil extends StatelessWidget {
   String chatRoomId;
@@ -30,6 +31,23 @@ class ChatRoomListTil extends StatelessWidget {
                       : lastMessage = cc.chatRoomsList[index].lastMessage;
           try {
             return InkWell(
+              onLongPress: () {
+                Get.defaultDialog(
+                    onConfirm: () {
+                      Get.back();
+                    },
+                    onCancel: () {
+                      cc.deleteChatRoom(chatRoomId);
+                    },
+                    title: "Delete chat",
+                    textConfirm: "No",
+                    middleText: "Are you sure to Delete chat...!",
+                    confirmTextColor: Colors.white,
+                    textCancel: "Yes",
+                    buttonColor: mainColor2,
+                    cancelTextColor: mainColor2,
+                    backgroundColor: white);
+              },
               onTap: () {
                 Get.toNamed(Routes.chatScreen, arguments: [
                   cc.friendInfoModel[index],

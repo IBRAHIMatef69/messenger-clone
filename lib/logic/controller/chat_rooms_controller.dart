@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:store_user/firebase_services/firestore_methods.dart';
@@ -57,10 +59,21 @@ class ChatRoomsController extends GetxController {
         .snapshots()
         .listen((event) {
       chatRoomsList.clear();
-    friendInfoModel.clear();
+      friendInfoModel.clear();
       for (int i = 0; i < event.docs.length; i++) {
         chatRoomsList.add(ChatRoomModel.fromMap(event.docs[i]));
       }
+    });
+  }
+
+  ///////////////////////////////////////// Delete my ChatRoom ///////////////////////////
+  deleteChatRoom(String chatRoomId) async {
+    await FireStoreMethods().chatRooms.doc(chatRoomId).delete().then((value) {
+      Fluttertoast.showToast(
+        gravity: ToastGravity.TOP,
+        msg: "Chat Deleted",
+        backgroundColor: Colors.red,
+      );
     });
   }
 

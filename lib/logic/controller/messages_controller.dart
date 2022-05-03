@@ -74,7 +74,12 @@ class MessagesController extends GetxController {
     recorder.dispositionStream();
   }
 
-  Future sendRecord(chatRoomId, sendClicked, myUserId, senderName, ) async {
+  Future sendRecord(
+    chatRoomId,
+    sendClicked,
+    myUserId,
+    senderName,
+  ) async {
     if (!isRecorderReady) return;
     final path = await recorder.stopRecorder();
     isRecording.value = false;
@@ -82,8 +87,14 @@ class MessagesController extends GetxController {
     if (path != null) {
       try {
         FireStorageMethods()
-            .uploadFile(audioFile!, "audio", chatRoomId, sendClicked, myUserId,
-                senderName,)
+            .uploadFile(
+          audioFile!,
+          "audio",
+          chatRoomId,
+          sendClicked,
+          myUserId,
+          senderName,
+        )
             .then((value) {
           Fluttertoast.showToast(
               gravity: ToastGravity.TOP,
@@ -205,7 +216,12 @@ class MessagesController extends GetxController {
   // }
 
   //////////////////////////// get video//////////////////
-  Future getVideo(chatRoomId, sendClicked, myUserId, senderName, ) async {
+  Future getVideo(
+    chatRoomId,
+    sendClicked,
+    myUserId,
+    senderName,
+  ) async {
     final pickedFile = await picker.pickVideo(source: ImageSource.gallery);
 
     if (pickedFile != null) {
@@ -214,7 +230,13 @@ class MessagesController extends GetxController {
         Get.back();
         FireStorageMethods()
             .uploadFile(
-                video!, "video", chatRoomId, sendClicked, myUserId, senderName, )
+          video!,
+          "video",
+          chatRoomId,
+          sendClicked,
+          myUserId,
+          senderName,
+        )
             .then((value) {
           Fluttertoast.showToast(
               gravity: ToastGravity.TOP,
@@ -240,7 +262,12 @@ class MessagesController extends GetxController {
   }
 
   ////////////////////////////////////// get image/////////////////////////
-  getImage(chatRoomId, sendClicked, myUserId, senderName, ) async {
+  getImage(
+    chatRoomId,
+    sendClicked,
+    myUserId,
+    senderName,
+  ) async {
     final pickedImage =
         await picker.pickImage(source: ImageSource.gallery, imageQuality: 25);
     if (pickedImage != null) {
@@ -252,7 +279,13 @@ class MessagesController extends GetxController {
         // Get.back();
         FireStorageMethods()
             .uploadFile(
-                image!, "image", chatRoomId, sendClicked, myUserId, senderName, )
+          image!,
+          "image",
+          chatRoomId,
+          sendClicked,
+          myUserId,
+          senderName,
+        )
             .then((value) {
           Fluttertoast.showToast(
               gravity: ToastGravity.TOP,
@@ -337,7 +370,7 @@ class MessagesController extends GetxController {
 
   sendFileMessage(
       {required String chatRoomId,
-       required bool sendClicked,
+      required bool sendClicked,
       required String fileMessage,
       required myUserId,
       required senderName}) {
@@ -362,8 +395,6 @@ class MessagesController extends GetxController {
       FireStoreMethods()
           .addMessage(chatRoomId, messageId, messageInfoMap)
           .then((value) async {
-
-
         Map<String, dynamic> lastMessageInfoMap = {
           "lastMessage": message,
           "lastMessageSendTs": lastMessageTs,
@@ -384,6 +415,7 @@ class MessagesController extends GetxController {
     }
   }
 
+////////////////////////////////////get messages//////////////////////////////
   getMessages(chatRoomId) {
     FireStoreMethods()
         .chatRooms
@@ -403,7 +435,6 @@ class MessagesController extends GetxController {
   deleteMessage(
     String chatRoomId,
     Map<String, dynamic> lastMessageInfoMap,
-    String,
     messageId,
   ) {
     FireStoreMethods().deleteMessage(chatRoomId, messageId).then((value) {

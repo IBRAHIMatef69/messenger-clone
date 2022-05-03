@@ -53,7 +53,7 @@ class ChatScreen extends StatelessWidget {
                 SystemChannels.textInput.invokeMethod('TextInput.hide');
               },
               child: Icon(
-                  IconBroken.Arrow___Left_2,
+                IconBroken.Arrow___Left_2,
                 size: 30,
                 color: Colors.black,
               ),
@@ -91,82 +91,74 @@ class ChatScreen extends StatelessWidget {
             Expanded(
                 child: GetX(
               initState: messagesController.getMessages(chatRoomId),
-              //  init: messagesController,
+               init: MessagesController(),
               builder: (MessagesController messagesController) {
-                try {
-                  return ListView.builder(
-                      cacheExtent: 1000,
-                      physics: BouncingScrollPhysics(),
-                      reverse: true,
-                      itemCount: messagesController.messagesList.length,
-                      itemBuilder: (context, index) {
-                        bool isMe =
-                            messagesController.messagesList[index].senderId ==
-                                    myUid
-                                ? true
-                                : false;
-                        bool isImage = messagesController
-                                .messagesList[index].message
-                                .toString()
-                                .contains("image%2")
-                            ? true
-                            : false;
-                        bool isVideo = messagesController
-                                .messagesList[index].message
-                                .contains("video%2")
-                            ? true
-                            : false;
-                        bool isAudio = messagesController
-                                .messagesList[index].message
-                                .contains("audio%2")
-                            ? true
-                            : false;
-                        return GestureDetector(
-                          onLongPress: () {
-                            if (messagesController
-                                    .messagesList[index].senderId ==
-                                myUid) {
-                              Get.defaultDialog(
-                                  title: "Delete !!",
-                                  confirmTextColor: Colors.white,
-                                  content: Text(""),
-                                  onCancel: () {
-                                    Get.back();
-                                  },
-                                  onConfirm: () async {
-                                    await messagesController.deleteMessage(
-                                        chatRoomId,
-                                        {
-                                          "lastMessage": "_",
-                                          "lastMessageSenderUid":
-                                              messagesController
-                                                  .messagesList[index].senderId
-                                        },
-                                        String,
-                                        messagesController
-                                            .messagesList[index].messageId);
-                                    Get.back();
-                                  },
-                                  textCancel: "Cancel",
-                                  textConfirm: "Delete");
-                            }
-                          },
-                          child: ChatBuble(
-                            message:
-                                messagesController.messagesList[index].message,
-                            isMe: isMe,
-                            isVideo: isVideo,
-                            isImage: isImage,
-                            isAudio: isAudio,
-                          ),
-                        );
-                      });
-                } catch (e) {
-                  return Center(
-                    child: Text("data" + e.toString()),
-                  );
-                }
-                ;
+                return ListView.builder(
+                    reverse: true,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: messagesController.messagesList.length,
+                    itemBuilder: (context, index) {
+                      bool isAudio = messagesController
+                              .messagesList[index].message
+                              .contains("audio%2")
+                          ? true
+                          : false;
+                      bool isMe =
+                          messagesController.messagesList[index].senderId ==
+                                  myUid
+                              ? true
+                              : false;
+                      bool isImage = messagesController
+                              .messagesList[index].message
+                              .toString()
+                              .contains("image%2")
+                          ? true
+                          : false;
+                      bool isVideo = messagesController
+                              .messagesList[index].message
+                              .contains("video%2")
+                          ? true
+                          : false;
+
+                      return GestureDetector(
+                        onLongPress: () {
+                          if (messagesController.messagesList[index].senderId ==
+                              myUid) {
+                            Get.defaultDialog(
+                                title: "Delete !!",
+                                confirmTextColor: Colors.white,
+                                content: Text(""),
+                                onCancel: () {
+                                  Get.back();
+                                },
+                                onConfirm: () async {
+                                  await messagesController.deleteMessage(
+                                      chatRoomId,
+                                      {
+                                        "lastMessage": "_",
+                                        "lastMessageSenderUid":
+                                            messagesController
+                                                .messagesList[index].senderId
+                                      },
+
+                                      messagesController
+                                          .messagesList[index].messageId);
+                                  Get.back();
+                                },
+                                textCancel: "Cancel",
+                                textConfirm: "Delete");
+                          }
+                        },
+                        child: ChatBuble(
+                          message:
+                              messagesController.messagesList[index].message,
+                          isMe: isMe,
+                          isVideo: isVideo,
+                          isImage: isImage,
+                          isAudio: isAudio,
+                        ),
+                      );
+                    });
               },
             )),
             Container(
