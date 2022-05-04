@@ -64,16 +64,12 @@ class MainScreen extends StatelessWidget {
             ),
             SliverToBoxAdapter(child: SearchWidget()),
             SliverToBoxAdapter(child: OnlineUsersChat()),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: Get.width * .01,
-              ),
-            ),
+
             SliverToBoxAdapter(
               child: Obx(() {
                 return Container(
                   alignment: Alignment.topLeft,
-                  margin: EdgeInsets.only(left: Get.width * .04),
+                  margin: EdgeInsets.only(left: Get.width * .03,top: 0),
                   padding: EdgeInsets.zero,
                   child: KTextUtils(
                       text:controller.isSearching.value==false? "Messages":"Users",

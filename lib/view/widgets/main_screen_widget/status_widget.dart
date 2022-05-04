@@ -57,7 +57,7 @@ class StatusWidget extends StatelessWidget {
               ),
             );
           },
-        ),
+        ),SizedBox(height: 3,),
         statusModel.userName!.toString().contains(" ")==true ?KTextUtils(
             text: "${(statusModel.userName!).substring(
               0,

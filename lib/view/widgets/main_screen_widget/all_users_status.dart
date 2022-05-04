@@ -44,7 +44,7 @@ class OnlineUsersChat extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                     margin: EdgeInsets.only(top: 10),
-                    height: Get.height * .12,
+                    height: Get.height * .13,
                     child: ListView.separated(
                       physics: BouncingScrollPhysics(),
                       shrinkWrap: true,
