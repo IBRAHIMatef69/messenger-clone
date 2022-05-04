@@ -12,7 +12,7 @@ class AddStatusWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DottedBorder(
-      radius: Radius.circular(Get.width * 2),
+      radius: Radius.circular(Get.width * 3),
       borderType: BorderType.Circle,
       color: mainColor2,
       strokeWidth: 2,
@@ -24,26 +24,30 @@ class AddStatusWidget extends StatelessWidget {
         onTap: () {
           Get.toNamed(Routes.addStatusScreen);
         },
-        child: Container(//margin: EdgeInsets.only(top: 10),
-          alignment: Alignment.bottomCenter,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Get.width * 2),
-          ),
-          height: Get.width * .18,
-          width: Get.width * .18,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(IconBroken.Upload),
-              KTextUtils(
-                  text: "Add Status",
-                  size: Get.width * .035,
-                  color: black,
-                  fontWeight: FontWeight.w800,
-                  textDecoration: TextDecoration.none)
-            ],
-          ),
-        ),
+        child: Container(
+            padding: EdgeInsets.zero,
+            margin: EdgeInsets.zero,
+            //margin: EdgeInsets.only(top: 10),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Get.width * 2),
+            ),
+            child: SizedBox(
+                width: Get.height * .116,
+                child: ClipRRect(child: Image.asset("assets/images/story.png")))
+            // Column(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Icon(IconBroken.Upload),
+            //     KTextUtils(
+            //         text: "Add Status",
+            //         size: Get.width * .035,
+            //         color: black,
+            //         fontWeight: FontWeight.w800,
+            //         textDecoration: TextDecoration.none)
+            //   ],
+            // ),
+            ),
       ),
     );
   }

@@ -69,8 +69,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      //home: VI(),
-           getPages: Routes.routes,
+     // home: SS(),
+     getPages: Routes.routes,
             initialRoute: Routes.splashScreen,
       //Fraon
     );

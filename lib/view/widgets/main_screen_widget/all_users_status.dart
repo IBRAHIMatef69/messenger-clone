@@ -27,8 +27,14 @@ class OnlineUsersChat extends StatelessWidget {
           })
               ? SizedBox()
               : Container(
-                  padding: EdgeInsets.only(left: 8),
-                  height: Get.height * .117,
+                  padding: EdgeInsets.only(
+                    left: 8,
+                  ),
+                  margin: EdgeInsets.only(
+                    bottom: 8,
+                  ),
+                  height: Get.height * .10,
+                  width: Get.height * .10,
                   child: AddStatusWidget(),
                 ),
           statusController.statesList.length == 0 ||

@@ -74,14 +74,25 @@ class ChatScreen extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-            Text(
-              "${(friendData.displayName.toString()).substring(
-                0,
-                (friendData.displayName.toString()).indexOf(" "),
-              )}", //  "${friendData.displayName}",
-              style: TextStyle(
-                  fontWeight: FontWeight.w600, fontSize: 20, color: black),
-            ),
+            (friendData.displayName.toString()).contains(" ") == false
+                ? Text(
+                    "${(friendData.displayName.toString())}",
+                    //  "${friendData.displayName}",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                        color: black),
+                  )
+                : Text(
+                    "${(friendData.displayName.toString()).substring(
+                      0,
+                      (friendData.displayName.toString()).indexOf(" "),
+                    )}", //  "${friendData.displayName}",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                        color: black),
+                  ),
           ],
         ),
       ),
@@ -91,7 +102,7 @@ class ChatScreen extends StatelessWidget {
             Expanded(
                 child: GetX(
               initState: messagesController.getMessages(chatRoomId),
-               init: MessagesController(),
+              init: MessagesController(),
               builder: (MessagesController messagesController) {
                 return ListView.builder(
                     reverse: true,
@@ -140,7 +151,6 @@ class ChatScreen extends StatelessWidget {
                                             messagesController
                                                 .messagesList[index].senderId
                                       },
-
                                       messagesController
                                           .messagesList[index].messageId);
                                   Get.back();

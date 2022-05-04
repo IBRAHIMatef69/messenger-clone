@@ -2,7 +2,7 @@ import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:store_user/view/widgets/chat_screen_widgets/audio_play_widget.dart';
+ import 'package:store_user/view/widgets/chat_screen_widgets/audio_play_widget.dart';
 import 'package:store_user/view/widgets/utils_widgets/image_viewer.dart';
 
 import '../../../utils/constants.dart';
@@ -22,7 +22,6 @@ class ChatBuble extends StatelessWidget {
   bool isAudio;
   bool isImage;
   bool isVideo;
-
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +79,6 @@ class ChatBuble extends StatelessWidget {
                   )
                 : isAudio
                     ? AudioPlay(message: message, isMe: isMe)
-
-
                     : Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
@@ -92,5 +89,4 @@ class ChatBuble extends StatelessWidget {
       ),
     );
   }
-
 }

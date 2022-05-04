@@ -58,11 +58,16 @@ class StatusWidget extends StatelessWidget {
             );
           },
         ),
-        KTextUtils(
+        statusModel.userName!.toString().contains(" ")==true ?KTextUtils(
             text: "${(statusModel.userName!).substring(
               0,
               (statusModel.userName!).indexOf(" "),
             )}",
+            size: Get.width * .04,
+            color: black,
+            fontWeight: FontWeight.bold,
+            textDecoration: TextDecoration.none):KTextUtils(
+            text: "${(statusModel.userName!)}",
             size: Get.width * .04,
             color: black,
             fontWeight: FontWeight.bold,

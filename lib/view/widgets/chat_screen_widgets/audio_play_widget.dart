@@ -31,8 +31,8 @@ class _AudioPlayState extends State<AudioPlay> {
     // });
 
     setState(() {
-        url = widget.message;
-        print(url);
+      url = widget.message;
+      print(url);
     });
     player.setUrl(url!).asStream().listen((event) {
       setState(() {
@@ -84,9 +84,12 @@ class _AudioPlayState extends State<AudioPlay> {
                             if (processingState == ProcessingState.loading ||
                                 processingState == ProcessingState.buffering) {
                               return GestureDetector(
-                                child: const Icon(
-                                  Icons.play_arrow,
-                                  color: Colors.white,
+                                child: SizedBox(
+                                  height: Get.width * .07,
+                                  width: Get.width * .07,
+                                  child: const CircularProgressIndicator(
+                                    color: white,strokeWidth: 2,
+                                  ),
                                 ),
                                 onTap: player.play,
                               );
