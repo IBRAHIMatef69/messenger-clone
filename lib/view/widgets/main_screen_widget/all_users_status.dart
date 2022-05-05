@@ -20,9 +20,9 @@ class OnlineUsersChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetX(
-      //  initState: statusController.getOnlyMyStatus(),
+   initState: statusController.getOnlyMyStatus(),
       builder: (StatusController controller) {
-        statusController.getOnlyMyStatus();
+       // statusController.getOnlyMyStatus();
         return Row(
           children: [
             statusController.statesList.any((element) {

@@ -130,7 +130,6 @@ class StatusController extends GetxController {
       for (int i = 0; i < event.docs.length; i++) {
         statesList.add(StatusModel.fromMap(event.docs[i]));
       }
-      print("ddddddddddddddddddddddddd" + statesList.length.toString());
     });
   }
 
@@ -179,10 +178,8 @@ class StatusController extends GetxController {
     String myUid = authBox.read(KUid);
     for (var i = 0; i < statesList.length; i++) {
       if (statesList[i].userUid == myUid) {
-        debugPrint("seeeeeeeeeeeeeeeeeee" + statesList[i].userName!);
         myStory = statesList[i];
       }
-
     }
     isMyStoryExist.value = statesList.any((element) {
       return element.userUid!.contains(myUid);
