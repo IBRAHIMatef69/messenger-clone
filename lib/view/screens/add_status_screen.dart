@@ -105,7 +105,7 @@ class AddStatusScreen extends StatelessWidget {
             ),
             floatingActionButton: Obx(
               () {
-                return FloatingActionButton(
+                return FloatingActionButton( heroTag: "btn1",
                   onPressed: () {
                     if (statusController.statusImage == null &&
                         captionController.text.isEmpty) {

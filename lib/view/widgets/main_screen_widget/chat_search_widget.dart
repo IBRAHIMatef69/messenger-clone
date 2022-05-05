@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:get/get.dart';
 import 'package:store_user/logic/controller/main_controller.dart';
 import 'package:store_user/utils/constants.dart';
@@ -26,7 +26,7 @@ class SearchWidget extends StatelessWidget {
                 onChanged: (value) {
                   if (value != "") {
                     controller.addSearchToList(value);
-                  } else if(value=="") {
+                  } else if (value == "") {
                     controller.clearSearch();
                   }
                 },

@@ -73,9 +73,9 @@ class MainController extends GetxController {
   }
 
   void clearSearch() {
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
-    searchList.clear();
+     searchList.clear();
     searchTextController.clear();
+
     isSearching.value = false;
 
     update();

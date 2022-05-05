@@ -19,87 +19,95 @@ class OnlineUsersChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return Row(
-        children: [
-          statusController.statesList.any((element) {
-            return element.userUid == mainController.userInfoModel.value!.uid;
-          })
-              ? SizedBox()
-              : Container(
-                  padding: EdgeInsets.only(
-                    left: 8,
-                  ),
-                  margin: EdgeInsets.only(
-                    bottom: 8,
-                  ),
-                  height: Get.height * .10,
-                  width: Get.height * .10,
-                  child: AddStatusWidget(),
-                ),
-          statusController.statesList.length == 0 ||
-                  mainController.isSearching.value == true
-              ? SizedBox()
-              : Expanded(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                    margin: EdgeInsets.only(top: 10),
-                    height: Get.height * .13,
-                    child: ListView.separated(
-                      physics: BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: statusController.statesList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (statusController.statesList[index].statusDate!
-                            .toDate()
-                            .add(Duration(days: 1))
-                            .isBefore(DateTime.now())) {
-                          try {
-                            statusController.deleteStatus(
-                                Uid:
-                                    statusController.statesList[index].userUid);
-                          } catch (e) {
-                            Fluttertoast.showToast(
-                              gravity: ToastGravity.TOP,
-                              msg: "check your internet connection" +
-                                  e.toString(),
-                              backgroundColor: Colors.green,
-                            );
-                          }
-                        }
-                        //  return AddStatusWidget();
-                        statusController.FunIsFriendStatus(
-                            chatRoomsController.chatRoomsList,
-                            statusController.statesList[index].userUid!);
-                        return statusController.isFriendStatus.value == true
-                            ? StatusWidget(
-                                statusModel: statusController.statesList[index],
-                                isMe: mainController.userInfoModel.value!.uid ==
-                                        statusController
-                                            .statesList[index].userUid
-                                    ? true
-                                    : false,
-                              )
-                            : SizedBox(
-                                width: 0,
-                              );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        statusController.FunIsFriendStatus(
-                            chatRoomsController.chatRoomsList,
-                            statusController.statesList[index].userUid!);
-                        return statusController.isFriendStatus.value == true
-                            ? SizedBox(width: Get.width * .04)
-                            : SizedBox(
-                                width: 0,
-                              );
-                      },
-                    ),
-                  ),
-                ),
-        ],
-      );
-    });
+    return GetX(
+      initState: statusController.getOnlyMyStatus(),
+      builder: (StatusController controller) { return Row(
+      children: [
+        statusController.statesList.any((element) {
+          return element.userUid == mainController.userInfoModel.value!.uid;
+        })
+            ? statusController.myStory != null &&
+            chatRoomsController.chatRoomsList.length == 0
+            ? Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: StatusWidget(
+              statusModel: statusController.myStory!, isMe: true),
+        )
+            : SizedBox()
+            : Container(
+          padding: EdgeInsets.only(
+            left: 8,
+          ),
+          margin: EdgeInsets.only(
+            bottom: 8,
+          ),
+          height: Get.height * .10,
+          width: Get.height * .10,
+          child: AddStatusWidget(),
+        ),
+        statusController.statesList.length == 0 ||
+            mainController.isSearching.value == true
+            ? SizedBox()
+            : Expanded(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+            margin: EdgeInsets.only(top: 10),
+            height: Get.height * .13,
+            child: ListView.separated(
+              physics: BouncingScrollPhysics(),
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: statusController.statesList.length,
+              itemBuilder: (BuildContext context, int index) {
+                if (statusController.statesList[index].statusDate!
+                    .toDate()
+                    .add(Duration(days: 1))
+                    .isBefore(DateTime.now())) {
+                  try {
+                    statusController.deleteStatus(
+                        Uid:
+                        statusController.statesList[index].userUid);
+                  } catch (e) {
+                    Fluttertoast.showToast(
+                      gravity: ToastGravity.TOP,
+                      msg: "check your internet connection" +
+                          e.toString(),
+                      backgroundColor: Colors.green,
+                    );
+                  }
+                }
+                //  return AddStatusWidget();
+                statusController.FunIsFriendStatus(
+                    chatRoomsController.chatRoomsList,
+                    statusController.statesList[index].userUid!);
+
+                return statusController.isFriendStatus.value == true
+                    ? StatusWidget(
+                  statusModel: statusController.statesList[index],
+                  isMe: mainController.userInfoModel.value!.uid ==
+                      statusController
+                          .statesList[index].userUid
+                      ? true
+                      : false,
+                )
+                    : SizedBox(
+                  width: 0,
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                statusController.FunIsFriendStatus(
+                    chatRoomsController.chatRoomsList,
+                    statusController.statesList[index].userUid!);
+                return statusController.isFriendStatus.value == true
+                    ? SizedBox(width: Get.width * .04)
+                    : SizedBox(
+                  width: 0,
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );  },);
   }
 }

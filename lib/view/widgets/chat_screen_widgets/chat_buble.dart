@@ -2,7 +2,7 @@ import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
- import 'package:store_user/view/widgets/chat_screen_widgets/audio_play_widget.dart';
+import 'package:store_user/view/widgets/chat_screen_widgets/audio_play_widget.dart';
 import 'package:store_user/view/widgets/utils_widgets/image_viewer.dart';
 
 import '../../../utils/constants.dart';
@@ -68,13 +68,14 @@ class ChatBuble extends StatelessWidget {
                     borderRadius: BorderRadius.circular(17),
                     child: BetterPlayer.network(
                       message,
-                      betterPlayerConfiguration: BetterPlayerConfiguration(
-                          showPlaceholderUntilPlay: true,
-                          fit: BoxFit.contain,
-                          autoDetectFullscreenAspectRatio: true,
-                          autoDetectFullscreenDeviceOrientation: true,
-                          expandToFill: false,
-                          fullScreenByDefault: false),
+                      betterPlayerConfiguration:
+                          const BetterPlayerConfiguration(
+                              showPlaceholderUntilPlay: true,
+                              fit: BoxFit.contain,
+                              autoDetectFullscreenAspectRatio: true,
+                              autoDetectFullscreenDeviceOrientation: true,
+                              expandToFill: false,
+                              fullScreenByDefault: false),
                     ),
                   )
                 : isAudio

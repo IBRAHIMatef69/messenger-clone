@@ -22,10 +22,8 @@ class StatusWidget extends StatelessWidget {
           builder: (StatusController controller) {
             return InkWell(
               onTap: () {
-
-                  Get.toNamed(Routes.viewStatusScreen,
-                      arguments: [statusModel, isMe]);
-
+                Get.toNamed(Routes.viewStatusScreen,
+                    arguments: [statusModel, isMe]);
               },
               child: Container(
                 height: Get.width * .19,
@@ -57,21 +55,26 @@ class StatusWidget extends StatelessWidget {
               ),
             );
           },
-        ),SizedBox(height: 3,),
-        statusModel.userName!.toString().contains(" ")==true ?KTextUtils(
-            text: "${(statusModel.userName!).substring(
-              0,
-              (statusModel.userName!).indexOf(" "),
-            )}",
-            size: Get.width * .04,
-            color: black,
-            fontWeight: FontWeight.bold,
-            textDecoration: TextDecoration.none):KTextUtils(
-            text: "${(statusModel.userName!)}",
-            size: Get.width * .04,
-            color: black,
-            fontWeight: FontWeight.bold,
-            textDecoration: TextDecoration.none)
+        ),
+        SizedBox(
+          height: 3,
+        ),
+        statusModel.userName!.toString().contains(" ") == true
+            ? KTextUtils(
+                text: "${(statusModel.userName!).substring(
+                  0,
+                  (statusModel.userName!).indexOf(" "),
+                )}",
+                size: Get.width * .04,
+                color: black,
+                fontWeight: FontWeight.bold,
+                textDecoration: TextDecoration.none)
+            : KTextUtils(
+                text: "${(statusModel.userName!)}",
+                size: Get.width * .04,
+                color: black,
+                fontWeight: FontWeight.bold,
+                textDecoration: TextDecoration.none)
       ],
     );
   }

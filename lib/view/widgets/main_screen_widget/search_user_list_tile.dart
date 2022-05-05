@@ -25,7 +25,7 @@ class SearchUserListTile extends StatelessWidget {
           "chatRoomId": cattRoomId,
           "chatRoomUsers": [friendData.uid!, chatRoomController.myUid],
           "lastMessageSendTs": DateTime.now(),
-          'lastMessage': 'lastMessage',
+          'lastMessage': ' ',
           'lastMessageSenderUid': 'lastMessageSenderUid',
         }).then((value) {
           Get.toNamed(Routes.chatScreen, arguments: [

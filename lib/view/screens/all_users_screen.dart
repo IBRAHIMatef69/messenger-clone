@@ -118,7 +118,7 @@ class AllUsersScreen extends StatelessWidget {
                           chatRoomController.myUid
                         ],
                         "lastMessageSendTs": DateTime.now(),
-                        'lastMessage': '_',
+                        'lastMessage': ' ',
                         'lastMessageSenderUid': chatRoomController.myUid,
                       }).then((value) {
                         Get.toNamed(Routes.chatScreen, arguments: [

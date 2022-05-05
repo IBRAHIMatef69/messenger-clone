@@ -23,6 +23,8 @@ class StatusController extends GetxController {
     getMyFriendsStatus();
   }
 
+
+
   final ImagePicker picker = ImagePicker();
   File? statusImage;
   RxBool isLoading = false.obs;
@@ -161,9 +163,7 @@ class StatusController extends GetxController {
     update();
   }
 
- 
-
-///////////////////////////is friend status;
+///////////////////////////is friend status///////////////////////////
   RxBool isFriendStatus = false.obs;
 
   FunIsFriendStatus(List<ChatRoomModel> chatRoomsList, statusUserUid) {
@@ -172,4 +172,23 @@ class StatusController extends GetxController {
       return element.chatRoomId.toString().contains(statusUserUid!);
     });
   }
+
+///////////////////////////  getOnlyMyStatus  ///////////////////////////
+  RxBool isMyStoryExist = false.obs;
+  StatusModel? myStory;
+
+  getOnlyMyStatus() {
+    String myUid = authBox.read(KUid);
+    isMyStoryExist.value = statesList.any((element) {
+      return element.userUid!.contains(myUid);
+    });
+    for (var i = 0; i < statesList.length; i++) {
+      if (statesList[i].userUid == myUid) {
+        debugPrint("seeeeeeeeeeeeeeeeeee" + statesList[i].userName!);
+        myStory = statesList[i];
+
+
+      }
+    }
+  update();}
 }
