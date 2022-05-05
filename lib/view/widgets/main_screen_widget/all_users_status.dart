@@ -23,7 +23,7 @@ class OnlineUsersChat extends StatelessWidget {
    initState: statusController.getOnlyMyStatus(),
       builder: (StatusController controller) {
        // statusController.getOnlyMyStatus();
-        return Row(
+        return mainController.userInfoModel.value !=null? Row(
           children: [
             statusController.statesList.any((element) {
               return element.userUid == mainController.userInfoModel.value!.uid;
@@ -112,7 +112,7 @@ class OnlineUsersChat extends StatelessWidget {
                     ),
                   ),
           ],
-        );
+        ):SizedBox();
       },
     );
   }

@@ -61,6 +61,7 @@ dependencies:
   timer_count_down: ^2.2.1
   spring: ^2.0.2
   flutter_staggered_animations: ^1.0.0
+  agora_rtc_engine: ^5.1.0
 
 
 

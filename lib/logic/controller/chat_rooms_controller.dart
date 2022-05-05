@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -68,7 +69,17 @@ class ChatRoomsController extends GetxController {
 
   ///////////////////////////////////////// Delete my ChatRoom ///////////////////////////
   deleteChatRoom(String chatRoomId) async {
-    await FireStoreMethods().chatRooms.doc(chatRoomId).delete().then((value) {
+  await  FireStoreMethods()
+        .chatRooms
+        .doc(chatRoomId)
+        .collection("chats")
+        .get()
+        .then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete();
+      }
+    });
+     await FireStoreMethods().chatRooms.doc(chatRoomId).delete().then((value) {
       Fluttertoast.showToast(
         gravity: ToastGravity.TOP,
         msg: "Chat Deleted",
