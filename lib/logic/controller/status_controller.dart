@@ -71,6 +71,7 @@ class StatusController extends GetxController {
           msg: "Status Uploaded successfully",
           backgroundColor: Colors.green,
         );
+        clearImage();
         Get.back();
         update();
       }).catchError((onError) {
