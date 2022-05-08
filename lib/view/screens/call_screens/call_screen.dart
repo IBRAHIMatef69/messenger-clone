@@ -2,19 +2,14 @@ import 'dart:async';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:store_user/logic/controller/call_controller.dart';
-import 'package:store_user/firebase_services/call_methods.dart';
+import 'package:store_user/api_services/call_methods.dart';
 import 'package:store_user/model/call_model.dart';
 import 'package:store_user/utils/constants.dart';
 import 'package:store_user/utils/my_string.dart';
-
 
 import 'dart:developer';
 
@@ -32,7 +27,7 @@ class CallScreen extends StatefulWidget {
 class _CallScreenState extends State<CallScreen> {
   final callController = Get.put(CallController());
   StreamSubscription? callStreamSubscription;
-      RtcEngine? _engine;
+  RtcEngine? _engine;
   final users = <int>[];
   final _infoStrings = <String>[];
   bool muted = false;
@@ -44,7 +39,6 @@ class _CallScreenState extends State<CallScreen> {
     super.initState();
     initialize();
     addPostFrameCallback();
-
   }
 
   Future<void> initialize() async {
@@ -57,7 +51,7 @@ class _CallScreenState extends State<CallScreen> {
     }
     //! initAgoraRtcEnging
     RtcEngineContext context = RtcEngineContext(APP_ID);
-      _engine = await RtcEngine.createWithContext(context);
+    _engine = await RtcEngine.createWithContext(context);
 
     await RtcEngine.create(APP_ID);
 
@@ -69,12 +63,11 @@ class _CallScreenState extends State<CallScreen> {
     _addAgoraEventHandlers();
     VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
 
-
     configuration.dimensions = VideoDimensions(width: 1920, height: 1080);
     await _engine!.setVideoEncoderConfiguration(configuration);
 
-    await _engine!.joinChannel(
-        null, callController.comingCall.value!.channelId, null, 0);
+    await _engine!
+        .joinChannel(null, callController.comingCall.value!.channelId, null, 0);
   }
 
   void _addAgoraEventHandlers() {
@@ -135,7 +128,23 @@ class _CallScreenState extends State<CallScreen> {
           child: views[index],
         ), // Expanded
       ), // List.generate
-    ); // Column
+    );
+    // return Stack(
+    //   children: [
+    //     Expanded(child: views[0]),
+    //     views.length > 1
+    //         ? Positioned(
+    //             right: Get.width * .1,
+    //             top: Get.width * .1,
+    //             child: SizedBox(
+    //               width: Get.width * .3,
+    //               height: Get.height * .3,
+    //               child: views[1],
+    //             ),
+    //           )
+    //         : SizedBox()
+    //   ],
+    // );
   }
 
   Widget _toolbar() {

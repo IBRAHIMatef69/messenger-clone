@@ -10,10 +10,11 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:random_string/random_string.dart';
-import 'package:store_user/firebase_services/fcm_api_handler.dart';
+import 'package:store_user/api_services/fcm_api_handler.dart';
 import 'package:store_user/model/message_model.dart';
-import '../../firebase_services/firestorage_methods.dart';
-import '../../firebase_services/firestore_methods.dart';
+import 'package:store_user/api_services/firestorage_methods.dart';
+
+import '../../api_services/firestore_methods.dart';
 import 'dart:async';
 
 import 'package:audio_session/audio_session.dart';

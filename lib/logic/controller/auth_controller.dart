@@ -1,18 +1,17 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:store_user/firebase_services/firestorage_methods.dart';
+import 'package:store_user/api_services/firestorage_methods.dart';
 
+import '../../api_services/firestore_methods.dart';
 import '../../routes/routes.dart';
 import '../../utils/constants.dart';
 import '../../utils/my_string.dart';
-import '../../firebase_services/firestore_methods.dart';
 
 class AuthController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;

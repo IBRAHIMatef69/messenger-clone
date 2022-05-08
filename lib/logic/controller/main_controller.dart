@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:store_user/model/user_model.dart';
-
-import '../../firebase_services/firestore_methods.dart';
+import '../../api_services/firestore_methods.dart';
 import '../../utils/my_string.dart';
 
 class MainController extends GetxController {
@@ -33,7 +31,6 @@ class MainController extends GetxController {
   //   searchTextController.clear();
   //   super.dispose();
   // }
-
 
   getUserData() async {
     await FireStoreMethods()
@@ -73,7 +70,7 @@ class MainController extends GetxController {
   }
 
   void clearSearch() {
-     searchList.clear();
+    searchList.clear();
     searchTextController.clear();
 
     isSearching.value = false;

@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:store_user/firebase_services/firestore_methods.dart';
+import '../../api_services/firestore_methods.dart';
 import 'package:store_user/model/chat_room_model.dart';
 import 'package:store_user/model/user_model.dart';
-import 'package:store_user/routes/routes.dart';
 import 'package:store_user/utils/my_string.dart';
 
 class ChatRoomsController extends GetxController {

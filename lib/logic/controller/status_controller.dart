@@ -6,12 +6,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:store_user/firebase_services/firestore_methods.dart';
+import 'package:store_user/api_services/firestore_methods.dart';
 import 'package:store_user/model/status_model.dart';
 import 'package:store_user/utils/my_string.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
-import '../../firebase_services/firestorage_methods.dart';
+import '../../api_services/firestorage_methods.dart';
 import '../../model/chat_room_model.dart';
 
 class StatusController extends GetxController {
