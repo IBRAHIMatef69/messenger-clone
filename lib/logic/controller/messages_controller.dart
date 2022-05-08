@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -316,15 +315,18 @@ class MessagesController extends GetxController {
 
   //////////////////////////////send messages////////////////
 
-  sendMessage(
-      {required String chatRoomId,
-      required String friendToken,
-      required bool sendClicked,
-      required TextEditingController messageTextController,
-      required myUserId,
-      required senderName}) {
+  sendMessage({
+    required String chatRoomId,
+    required String friendToken,
+    required bool sendClicked,
+    required TextEditingController messageTextController,
+    required myUserId,
+    required senderName,
+    required senderImage,
+  }) async {
     if (messageTextController.text != "") {
       String message = messageTextController.text;
+
       var lastMessageTs = DateTime.now();
 
 //messageId
@@ -344,13 +346,19 @@ class MessagesController extends GetxController {
           .addMessage(chatRoomId, messageId, messageInfoMap)
           .then((value) async {
         await FcmHandler.sendMessageNotification(
-            friendToken, message, senderName);
+          friendToken,
+          message,
+          senderName,senderImage,
+        );
         Map<String, dynamic> lastMessageInfoMap = {
           "lastMessage": message,
           "lastMessageSendTs": lastMessageTs,
           "lastMessageSenderUid": myUserId
         };
 
+        messageTextController.clear();
+        isWriting.value = false;
+        update();
         FireStoreMethods()
             .updateLastMessageSend(chatRoomId, lastMessageInfoMap);
 

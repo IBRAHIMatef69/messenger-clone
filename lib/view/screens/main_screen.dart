@@ -21,7 +21,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PickupLayout(
+    return AnswerCallWrapLayout(
       scaffold: Scaffold(
           backgroundColor: homeBackGroundColor,
           body: RefreshIndicator(

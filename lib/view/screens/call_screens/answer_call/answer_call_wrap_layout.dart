@@ -4,7 +4,7 @@ import 'package:store_user/logic/controller/call_controller.dart';
 
 import 'answer_call_screen.dart';
 
-class PickupLayout extends StatelessWidget {
+class AnswerCallWrapLayout extends StatelessWidget {
   final Widget scaffold;
   final callController = Get.put(CallController());
 
@@ -14,14 +14,14 @@ class PickupLayout extends StatelessWidget {
       return callController.isComingCall.value == true
           ? Obx(() {
               return callController.comingCall.value!.hasDialled == false
-                  ? PickupScreen(call: callController.comingCall.value!)
+                  ? AnswerCallScreen(call: callController.comingCall.value!)
                   : scaffold;
             })
           : scaffold;
     });
   }
 
-  PickupLayout({
+  AnswerCallWrapLayout({
     required this.scaffold,
   });
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_user/view/widgets/chat_screen_widgets/audio_play_widget.dart';
 import 'package:store_user/view/widgets/utils_widgets/image_viewer.dart';
+import 'package:voice_message_package/voice_message_package.dart';
 
 import '../../../utils/constants.dart';
 
@@ -79,7 +80,15 @@ class ChatBuble extends StatelessWidget {
                     ),
                   )
                 : isAudio
-                    ? AudioPlay(message: message, isMe: isMe)
+                    ? VoiceMessage(
+                        audioSrc: message,
+                        me: isMe,
+                        contactFgColor: white,
+                        contactPlayIconColor: mainColor2,
+                        contactBgColor: mainColor4,
+          meBgColor: mainColor2,
+                      )
+                    // AudioPlay(message: message, isMe: isMe)
                     : Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(

@@ -5,26 +5,34 @@ import '../utils/my_string.dart';
 
 
 class FcmHandler {
+
+
+
+
+
   static Future sendMessageNotification(
     String token,
     messageBody,
-    messageSender,
+    messageSender,senderImageUrl
   ) async {
     Map data = {
       "to": "$token",
       "notification": {
         "title": "$messageSender",
         "body": "$messageBody",
+        "imageUrl":"$senderImageUrl",
         "sound": "default"
       },
       "android": {
         "notification_priority": "PRIORITY_MAX",
-        "priority": "HIGH",
+        "priority": "high",
         "notification": {
           "sound": "default",
-          "default_sound": true,
+          "defaultSound": true,
           "default_vibrate_timings": true,
-          "default_light_settings": true
+          "default_light_settings": true,
+          "vibrate":true
+
         }
       },
       "data": {

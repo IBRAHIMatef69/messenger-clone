@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:store_user/logic/controller/call_controller.dart';
@@ -11,18 +12,18 @@ import 'package:store_user/view/widgets/utils_widgets/circule_image_avatar.dart'
 
 import '../../../../utils/constants.dart';
 
-
-class PickupScreen extends StatelessWidget {
+class AnswerCallScreen extends StatelessWidget {
   final Call call;
   final CallMethods callMethods = CallMethods();
   final callController = Get.put(CallController());
 
-  PickupScreen({
+  AnswerCallScreen({
     required this.call,
   });
 
   @override
   Widget build(BuildContext context) {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Scaffold(
       backgroundColor: homeBackGroundColor,
       body: Container(

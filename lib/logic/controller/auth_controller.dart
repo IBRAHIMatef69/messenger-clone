@@ -201,7 +201,7 @@ class AuthController extends GetxController {
           buttonColor: mainColor2,
           cancelTextColor: mainColor,
           backgroundColor: white);
-    } catch (error) {
+    } catch (error) { isLoading.value = false;
       Get.defaultDialog(
           title: "error",
           middleText: "$error",

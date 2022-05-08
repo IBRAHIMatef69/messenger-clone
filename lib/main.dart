@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:store_user/routes/routes.dart';
 
@@ -32,14 +32,24 @@ void main() async {
 
   var token = await FirebaseMessaging.instance.getToken();
   debugPrint(token.toString());
+  await FirebaseMessaging.instance.getNotificationSettings();
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  await messaging.requestPermission(
+    alert: true,
+    announcement: true,
+    badge: true,
+    carPlay: true,
+    criticalAlert: true,
+    provisional: true,
+    sound: true,
+  );
   FirebaseMessaging.onMessage.listen((event) {
-    // debugPrint(event.notification!.body.toString());
-    //
-    // Fluttertoast.showToast(
-    //   gravity: ToastGravity.TOP,
-    //   msg: "on Message",
-    //   backgroundColor: Colors.red,
-    // );
+
+
+
+
   });
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
     print(event.notification!.body.toString());

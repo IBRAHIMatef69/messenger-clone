@@ -10,8 +10,7 @@ import 'package:store_user/api_services/call_methods.dart';
 import 'package:store_user/model/call_model.dart';
 import 'package:store_user/utils/constants.dart';
 import 'package:store_user/utils/my_string.dart';
-
-import 'dart:developer';
+import 'package:store_user/view/widgets/utils_widgets/circule_image_avatar.dart';
 
 class CallScreen extends StatefulWidget {
   final Call call;
@@ -148,7 +147,6 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   Widget _toolbar() {
-    if (_role == ClientRole.Audience) return SizedBox();
     return Container(
       alignment: Alignment.bottomCenter,
       padding: const EdgeInsets.symmetric(vertical: 48),
@@ -175,9 +173,11 @@ class _CallScreenState extends State<CallScreen> {
           ),
           RawMaterialButton(
             onPressed: () {
-              CallMethods().endCall(call: callController.comingCall.value!);
-
-              Navigator.pop(context);
+              CallMethods()
+                  .endCall(call: callController.comingCall.value!)
+                  .then((value) {
+                Navigator.pop(context);
+              });
             },
             child: const Icon(
               Icons.call_end,
@@ -247,9 +247,66 @@ class _CallScreenState extends State<CallScreen> {
     return Scaffold(
       backgroundColor: black,
       body: Center(
-        child: Stack(
-          children: [_viewRows(), _toolbar()],
-        ),
+        child: Stack(children: [
+          _viewRows(),
+          _toolbar(),
+          users.length == 0 && widget.call.callerId == callController.myUid
+              ? Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(vertical: 100),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      CirculeImageAvatar(
+                        color: homeBackGroundColor,
+                        imageUrl: widget.call.receiverPic,
+                        width: Get.width * .3,
+                        openImageViewer: false,
+                      ),
+                      SizedBox(
+                        height: Get.height * .01,
+                      ),
+                      Text(
+                        widget.call.receiverName,
+                        style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: Get.width * .08,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "Calling...",
+                        style: TextStyle(
+                          color: Colors.white54,
+                          fontSize: Get.width * .04,
+                        ),
+                      ),
+                      Spacer(),
+                      // Card(
+                      //   elevation: 4,
+                      //   shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(50)),
+                      //   child: InkWell(
+                      //     onTap: () async {
+                      //       CallMethods().endCall(call: widget.call);
+                      //     },
+                      //     child: Padding(
+                      //       padding: const EdgeInsets.all(10.0),
+                      //       child: Transform.rotate(
+                      //         angle: 3,
+                      //         child: Icon(
+                      //           IconBroken.Call,
+                      //           size: Get.width * .12,
+                      //           color: Colors.redAccent,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                )
+              : SizedBox()
+        ]),
       ),
 
       // backgroundColor: darkGrey,

@@ -9,11 +9,12 @@ class CallController extends GetxController {
   GetStorage authBox = GetStorage();
   RxBool isComingCall = false.obs;
   final comingCall = Rxn<Call>();
+  String? myUid;
 
   @override
   void onInit() async {
     await GetStorage.init();
-
+    myUid = authBox.read(KUid);
     callStream();
 
     super.onInit();
@@ -34,7 +35,6 @@ class CallController extends GetxController {
         isComingCall.value = true;
       } else {
         isComingCall.value = false;
-
       }
     });
   }

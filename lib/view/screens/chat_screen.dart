@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
- import 'package:store_user/utils/call_utilites.dart';
+import 'package:store_user/utils/call_utilites.dart';
 import 'package:store_user/api_services/fcm_api_handler.dart';
 import 'package:store_user/api_services/permission_services.dart';
 import 'package:store_user/logic/controller/messages_controller.dart';
@@ -24,7 +24,7 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PickupLayout(
+    return AnswerCallWrapLayout(
       scaffold: Scaffold(
         backgroundColor: homeBackGroundColor,
         appBar: AppBar(
@@ -292,13 +292,14 @@ class ChatScreen extends StatelessWidget {
                                                           )
                                                               .then(
                                                                   (value) async {
-                                                            FcmHandler
-                                                                .sendMessageNotification(
-                                                                    friendData
-                                                                        .token!,
-                                                                    "Image",
-                                                                    myData
-                                                                        .displayName);
+                                                            FcmHandler.sendMessageNotification(
+                                                                friendData
+                                                                    .token!,
+                                                                "Image",
+                                                                myData
+                                                                    .displayName,
+                                                                myData
+                                                                    .profileUrl);
                                                           }).catchError(
                                                                   (onError) {
                                                             debugPrint(
@@ -314,13 +315,14 @@ class ChatScreen extends StatelessWidget {
                                                             myData.displayName,
                                                           )
                                                               .then((value) {
-                                                            FcmHandler
-                                                                .sendMessageNotification(
-                                                                    friendData
-                                                                        .token!,
-                                                                    "Video",
-                                                                    myData
-                                                                        .displayName);
+                                                            FcmHandler.sendMessageNotification(
+                                                                friendData
+                                                                    .token!,
+                                                                "Video",
+                                                                myData
+                                                                    .displayName,
+                                                                myData
+                                                                    .profileUrl);
                                                           });
                                                         },
                                                         textCancel: "Image",
@@ -350,7 +352,8 @@ class ChatScreen extends StatelessWidget {
                                         FcmHandler.sendMessageNotification(
                                             friendData.token!,
                                             "voice Record",
-                                            myData.displayName);
+                                            myData.displayName,
+                                            myData.profileUrl);
                                       });
                                     },
                                     icon: Icon(
@@ -387,7 +390,8 @@ class ChatScreen extends StatelessWidget {
                                           chatRoomId: chatRoomId,
                                           senderName: myData.displayName,
                                           myUserId: myData.uid,
-                                          friendToken: friendData.token!);
+                                          friendToken: friendData.token!,
+                                          senderImage: myData.profileUrl);
                                     },
                                     icon: Icon(
                                       IconBroken.Send,
