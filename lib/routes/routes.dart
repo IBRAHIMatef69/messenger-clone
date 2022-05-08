@@ -31,6 +31,7 @@ class Routes {
   static const chatScreen = "/chatScreen";
   static const addStatusScreen = "/addStatusScreen";
   static const viewStatusScreen = "/viewStatusScreen";
+  static const pickupLayout = "/pickupLayout";
   static final routes = [
     GetPage(
       name: splashScreen,
@@ -99,11 +100,9 @@ class Routes {
           MainBinding(),
         ]),
     GetPage(
-        name: viewStatusScreen,
-        page: () => ViewStatusScreen(),
-        transition: Transition.downToUp,
-        bindings: [
-
-        ]),
+      name: viewStatusScreen,
+      page: () => ViewStatusScreen(),
+      transition: Transition.downToUp,
+    ),
   ];
 }

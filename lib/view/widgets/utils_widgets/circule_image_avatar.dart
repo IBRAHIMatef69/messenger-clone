@@ -11,6 +11,7 @@ class CirculeImageAvatar extends StatelessWidget {
   double width;
   Color? color;
   File? image;
+  bool? openImageViewer;
   final settingController = Get.put(SettingController());
 
   @override
@@ -39,14 +40,16 @@ class CirculeImageAvatar extends StatelessWidget {
             return ClipRRect(
               borderRadius: BorderRadius.circular(width * 2),
               child: settingController.profileImageFile == null
-                  ? InkWell(
+                  ? InkWell(borderRadius: BorderRadius.circular(width),
                       onTap: () {
-                        Get.to(
-                          () => ImageViewer(
-                            imageUrl: imageUrl,
-                          ),
-                          transition: Transition.topLevel,
-                        );
+                        openImageViewer == null
+                            ? Get.to(
+                                () => ImageViewer(
+                                  imageUrl: imageUrl,
+                                ),
+                                transition: Transition.topLevel,
+                              )
+                            : null;
                       },
                       child: FadeInImage.assetNetwork(
                           fit: BoxFit.cover,
@@ -65,5 +68,5 @@ class CirculeImageAvatar extends StatelessWidget {
   }
 
   CirculeImageAvatar(
-      {required this.imageUrl, required this.width, this.color, this.image});
+      {required this.imageUrl, required this.width, this.color, this.image,this.openImageViewer});
 }

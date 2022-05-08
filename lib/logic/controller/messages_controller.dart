@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:better_player/better_player.dart';
-import 'package:file_picker/file_picker.dart';
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,8 +15,7 @@ import 'package:store_user/model/message_model.dart';
 import '../../firebase_services/firestorage_methods.dart';
 import '../../firebase_services/firestore_methods.dart';
 import 'dart:async';
-import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
