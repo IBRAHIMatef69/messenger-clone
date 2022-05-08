@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:store_user/logic/controller/status_controller.dart';
@@ -82,8 +83,6 @@ class AddStatusScreen extends StatelessWidget {
                   alignment: Alignment.center,
                   height: Get.height * .8,
                   margin: EdgeInsets.symmetric(horizontal: 20),
-
-
                   child: TextField(
                     controller: captionController,
                     keyboardType: TextInputType.multiline,
@@ -109,7 +108,7 @@ class AddStatusScreen extends StatelessWidget {
               () {
                 return FloatingActionButton(
                   heroTag: "btn1",
-                  onPressed: () {
+                  onPressed: () async{
                     if (statusController.statusImage == null &&
                         statusController.statusVideo == null &&
                         captionController.text.isEmpty) {
@@ -118,7 +117,7 @@ class AddStatusScreen extends StatelessWidget {
                         msg: "please add status",
                         backgroundColor: Colors.red,
                       );
-                    } else {
+                    } else {await SystemChannels.textInput.invokeMethod('TextInput.hide');
                       statusController.uploadingUserStatus(
                         captionController.text.toString(),
                         mainController.userInfoModel.value!.profileUrl,
@@ -150,7 +149,7 @@ class AddStatusScreen extends StatelessWidget {
                   return FloatingActionButton(
                     onPressed: () {
                       Get.defaultDialog(
-                        title: "Delete !!",
+                        title: "select file",
                         confirmTextColor: Colors.white,
                         content: Text(""),
                         onCancel: () async {

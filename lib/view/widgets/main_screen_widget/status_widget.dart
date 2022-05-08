@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:store_user/logic/controller/status_controller.dart';
 import 'package:store_user/model/status_model.dart';
 import 'package:store_user/model/user_model.dart';
@@ -12,6 +13,8 @@ import '../utils_widgets/text_utils.dart';
 class StatusWidget extends StatelessWidget {
   StatusModel statusModel;
   bool isMe;
+  Duration? duration;
+  final player = AudioPlayer();
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +25,17 @@ class StatusWidget extends StatelessWidget {
           builder: (StatusController controller) {
             return InkWell(
               onTap: () {
-                Get.toNamed(Routes.viewStatusScreen,
-                    arguments: [statusModel, isMe]);
+                if (statusModel.isVideo==true){
+                  player.setUrl(statusModel.statusImageUrl!).then((value) {
+
+                      duration = value;
+                      Get.toNamed(Routes.viewStatusScreen,
+                          arguments: [statusModel, isMe,duration]);
+                  });
+
+                }else{  Get.toNamed(Routes.viewStatusScreen,
+                    arguments: [statusModel, isMe,duration=Duration.zero]);}
+
               },
               child: Container(
                 height: Get.width * .19,

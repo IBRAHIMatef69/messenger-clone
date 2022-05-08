@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:better_player/better_player.dart';
  import 'package:flutter/material.dart';
-
+import 'package:just_audio/just_audio.dart';
 class EventListenerPage extends StatefulWidget {
   @override
   _EventListenerPageState createState() => _EventListenerPageState();
@@ -13,22 +13,29 @@ class _EventListenerPageState extends State<EventListenerPage> {
   List<BetterPlayerEvent> events = [];
   StreamController<DateTime> _eventStreamController =
   StreamController.broadcast();
-
+  Duration? duration;
   @override
   void initState() {
+    String rt="https://firebasestorage.googleapis.com/v0/b/user-17bfd.appspot.com/o/status%2Fimage_picker6177712424162244206.mp4?alt=media&token=03e628ca-1513-4609-aeac-11d68891dd7d";
     BetterPlayerConfiguration betterPlayerConfiguration =
     BetterPlayerConfiguration(
       aspectRatio: 16 / 9,
       fit: BoxFit.contain,
     );
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.network, "https://firebasestorage.googleapis.com/v0/b/user-17bfd.appspot.com/o/status%2Fimage_picker3380905442431195389.mp4?alt=media&token=5b0530c2-dc4c-474b-a2f0-c3a4711a045e");
+        BetterPlayerDataSourceType.network, "https://firebasestorage.googleapis.com/v0/b/user-17bfd.appspot.com/o/status%2Fimage_picker6177712424162244206.mp4?alt=media&token=03e628ca-1513-4609-aeac-11d68891dd7d");
     _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
-    _betterPlayerController.setupDataSource(dataSource);
+    _betterPlayerController.setupDataSource(dataSource);    player.setUrl(rt).asStream().listen((event) {
+      setState(() {
+        duration = event;
+        print("dddssssssssssssssssssssssssssssss"+ duration!.inSeconds.toString());
+      });
+    });
     _betterPlayerController.addEventsListener(_handleEvent);
+
     super.initState();
   }
-
+  final player = AudioPlayer();
   @override
   void dispose() {
     _eventStreamController.close();

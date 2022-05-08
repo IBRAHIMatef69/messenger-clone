@@ -8,7 +8,7 @@ import 'package:store_user/logic/controller/status_controller.dart';
 import 'package:store_user/utils/constants.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
-
+import 'package:just_audio/just_audio.dart';
 
 import '../../model/status_model.dart';
 import '../../utils/styles.dart';
@@ -24,14 +24,17 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
   bool isMe = Get.arguments[1];
 
   final statusController = Get.put(StatusController());
+  Duration? duration = Get.arguments[2];
 
+  // final player = AudioPlayer();
   final CountdownController countdownController =
       new CountdownController(autoStart: true);
   late BetterPlayerController _betterPlayerController;
+
   @override
   void initState() {
     BetterPlayerControlsConfiguration controlsConfiguration =
-    const BetterPlayerControlsConfiguration(
+        const BetterPlayerControlsConfiguration(
       controlBarColor: Colors.transparent,
       iconsColor: Colors.transparent,
       playIcon: Icons.forward,
@@ -56,27 +59,33 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
     );
 
     BetterPlayerConfiguration betterPlayerConfiguration =
-    BetterPlayerConfiguration(
-        aspectRatio: 16 / 9,
-        autoPlay: true,
-        fit: BoxFit.contain,
-        controlsConfiguration: controlsConfiguration);
+        BetterPlayerConfiguration(
+            aspectRatio: 16 / 9,
+            autoPlay: true,
+            fit: BoxFit.contain,
+            controlsConfiguration: controlsConfiguration);
+
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
       statusData.statusImageUrl!,
       overriddenDuration: const Duration(seconds: 30),
     );
     _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
-   statusData.isVideo!? _betterPlayerController.setupDataSource(dataSource):null;
+    statusData.isVideo!
+        ? _betterPlayerController.setupDataSource(dataSource)
+        : null;
     super.initState();
-
   }
-@override
+
+  @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     _betterPlayerController.dispose();
+    duration=Duration.zero;
+
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,14 +99,22 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
             ),
             Countdown(
               controller: countdownController,
-              seconds: 666,
+              seconds: statusData.isVideo! && duration != null
+                  ? duration!.inSeconds > 30
+                      ? 30
+                      : duration!.inSeconds
+                  : 7,
               build: (BuildContext context, double time) => SizedBox(
                 height: 3,
                 child: LinearProgressIndicator(
                   color: mainColor2,
                   backgroundColor: mainColor2,
                   valueColor: AlwaysStoppedAnimation<Color>(white),
-                  value: time / 7,
+                  value: statusData.isVideo! && duration != null
+                      ? duration!.inSeconds > 30
+                          ? 30
+                          : time / duration!.inSeconds
+                      : time / 7,
                 ),
               ),
               interval: Duration(milliseconds: 10),
@@ -176,12 +193,11 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
               },
               onLongPress: () {
                 countdownController.pause();
-                _betterPlayerController.pause();
+                statusData.isVideo! ? _betterPlayerController.pause() : null;
               },
               onLongPressUp: () {
                 countdownController.resume();
-                _betterPlayerController.play();
-
+                statusData.isVideo! ? _betterPlayerController.play() : null;
               },
               child: Container(
                 width: Get.width,
@@ -230,26 +246,29 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
                           Positioned(
                             top: Get.height * .002,
                             child: Center(
-                              child: statusData.isVideo!?
-
-                              Container( height: Get.height * .8,
-                                child: SizedBox(width: Get.width,
-                                  child: AspectRatio (
-                                    aspectRatio: 16 / 9,
-                                    child: BetterPlayer(controller: _betterPlayerController),
-                                  ),
-                                ),
-                              )  :
-                              Container(
-                                color: Colors.transparent,
-                                width: Get.width,
-                                height: Get.height * .8,
-                                child: ClipRRect(
-                                    child: FadeInImage.assetNetwork(
-                                  placeholder: "assets/images/l.gif",
-                                  image: "${statusData.statusImageUrl}",
-                                )),
-                              ),
+                              child: statusData.isVideo!
+                                  ? Container(
+                                      height: Get.height * .8,
+                                      child: SizedBox(
+                                        width: Get.width,
+                                        child: AspectRatio(
+                                          aspectRatio: 16 / 9,
+                                          child: BetterPlayer(
+                                              controller:
+                                                  _betterPlayerController),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      color: Colors.transparent,
+                                      width: Get.width,
+                                      height: Get.height * .8,
+                                      child: ClipRRect(
+                                          child: FadeInImage.assetNetwork(
+                                        placeholder: "assets/images/l.gif",
+                                        image: "${statusData.statusImageUrl}",
+                                      )),
+                                    ),
                             ),
                           ),
                           statusData.statusCaption == ""
