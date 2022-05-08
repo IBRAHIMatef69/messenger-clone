@@ -152,9 +152,7 @@ class ChatScreen extends StatelessWidget {
                                   title: "Delete !!",
                                   confirmTextColor: Colors.white,
                                   content: Text(""),
-                                  onCancel: () {
-                                    Get.back();
-                                  },
+                                  onCancel: () {},
                                   onConfirm: () async {
                                     await messagesController.deleteMessage(
                                         chatRoomId,
@@ -173,12 +171,12 @@ class ChatScreen extends StatelessWidget {
                             }
                           },
                           child: ChatBuble(
-                            message:
-                                messagesController.messagesList[index].message,
                             isMe: isMe,
                             isVideo: isVideo,
                             isImage: isImage,
                             isAudio: isAudio,
+                            message:
+                                messagesController.messagesList[index].message,
                           ),
                         );
                       });
