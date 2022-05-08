@@ -149,7 +149,7 @@ class ChatListViewChatRoomsList extends StatelessWidget {
                           ),
                         ),
                         Spring.slide(
-                          slideType: SlideType.slide_in_bottom,
+                            slideType: SlideType.slide_in_bottom,
                           delay: Duration(milliseconds: 1100),
                           animDuration: Duration(milliseconds: 1200),
                           curve: Curves.bounceOut,

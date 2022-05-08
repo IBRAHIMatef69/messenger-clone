@@ -82,6 +82,8 @@ class AddStatusScreen extends StatelessWidget {
                   alignment: Alignment.center,
                   height: Get.height * .8,
                   margin: EdgeInsets.symmetric(horizontal: 20),
+
+
                   child: TextField(
                     controller: captionController,
                     keyboardType: TextInputType.multiline,
@@ -105,9 +107,11 @@ class AddStatusScreen extends StatelessWidget {
             ),
             floatingActionButton: Obx(
               () {
-                return FloatingActionButton( heroTag: "btn1",
+                return FloatingActionButton(
+                  heroTag: "btn1",
                   onPressed: () {
                     if (statusController.statusImage == null &&
+                        statusController.statusVideo == null &&
                         captionController.text.isEmpty) {
                       Fluttertoast.showToast(
                         gravity: ToastGravity.TOP,
@@ -145,7 +149,21 @@ class AddStatusScreen extends StatelessWidget {
                 builder: (_) {
                   return FloatingActionButton(
                     onPressed: () {
-                      statusController.getImage();
+                      Get.defaultDialog(
+                        title: "Delete !!",
+                        confirmTextColor: Colors.white,
+                        content: Text(""),
+                        onCancel: () async {
+                          await statusController.clearImage();
+                          statusController.getVideo();
+                        },
+                        onConfirm: () async {
+                          await statusController.clearImage();
+                          statusController.getImage();
+                        },
+                        textCancel: "Video",
+                        textConfirm: "Image",
+                      );
                     },
                     child: Icon(
                       IconBroken.Camera,

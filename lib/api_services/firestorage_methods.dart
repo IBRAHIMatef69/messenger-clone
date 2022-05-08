@@ -83,10 +83,11 @@ class FireStorageMethods {
 
   ////////////////////////////////////////////addStatus    //////////////////////////////
 
-  Future<void> uploadStatusImage({required File file,
+  Future<void> uploadStatusFile({required File file,
     required String userUid,
      required String statusCaption,
     required String userImageUrl,
+    required bool isVideo,
     required String userName,
     required statusDate,
   }) async {
@@ -104,7 +105,7 @@ class FireStorageMethods {
             statusCaption: statusCaption,
             userImageUrl: userImageUrl,
             userName: userName,
-            statusDate: statusDate);
+            statusDate: statusDate, isVideo: isVideo);
       });
     }).catchError((onError) {
       print("$onError ddddddddddddddddddddddddd");

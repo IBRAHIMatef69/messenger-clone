@@ -39,7 +39,6 @@ dependencies:
   firebase_core:
   firebase_auth:
   http:
-  flutter_fadein:
   cloud_firestore: ^3.1.10
   firebase_storage: ^10.2.9
   get_storage: ^2.0.3
@@ -63,6 +62,8 @@ dependencies:
   flutter_staggered_animations: ^1.0.0
   agora_rtc_engine: ^5.1.0
   voice_message_package: ^0.0.66
+
+
 
 
 

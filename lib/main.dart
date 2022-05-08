@@ -10,6 +10,8 @@ import 'package:store_user/routes/routes.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:store_user/utils/constants.dart';
 
+import 'f.dart';
+
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
@@ -78,9 +80,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: SS(),
-      getPages: Routes.routes,
-      initialRoute: Routes.splashScreen,
+      // home: EventListenerPage(),
+     getPages: Routes.routes,
+     initialRoute: Routes.splashScreen,
       //Fraon
     );
   }

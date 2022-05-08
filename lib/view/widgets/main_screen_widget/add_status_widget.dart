@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_user/routes/routes.dart';
 import 'package:store_user/utils/constants.dart';
-import 'package:store_user/utils/styles.dart';
-import 'package:store_user/view/widgets/utils_widgets/text_utils.dart';
+
 
 class AddStatusWidget extends StatelessWidget {
   const AddStatusWidget({Key? key}) : super(key: key);

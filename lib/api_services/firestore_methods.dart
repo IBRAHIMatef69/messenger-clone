@@ -62,6 +62,7 @@ class FireStoreMethods {
     required String statusImageUrl,
     required String statusCaption,
     required String userImageUrl,
+    required bool isVideo,
     required String userName,
     required statusDate,
   }) async {
@@ -70,6 +71,7 @@ class FireStoreMethods {
       "statusImageUrl": statusImageUrl,
       "statusCaption": statusCaption,
       "userImageUrl": userImageUrl,
+      "isVideo":isVideo,
       "userName": userName,
       "statusDate": statusDate,
 

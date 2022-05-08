@@ -25,15 +25,20 @@ class StatusController extends GetxController {
 
   final ImagePicker picker = ImagePicker();
   File? statusImage;
+  File? statusVideo;
   RxBool isLoading = false.obs;
   RxBool isDeleting = false.obs;
   final GetStorage authBox = GetStorage();
   var statesList = <StatusModel>[].obs;
 
+//////////////////////////////////////
+
   getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       statusImage = File(pickedFile.path);
+
+
       update();
     } else {
       Fluttertoast.showToast(
@@ -43,11 +48,36 @@ class StatusController extends GetxController {
       );
       print("No Image Selected");
     }
+    Get.back();
     update();
   }
 
+  Future getVideo() async {
+    final pickedFile = await picker.pickVideo(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      statusVideo = await File(pickedFile.path);
+      Fluttertoast.showToast(
+        gravity: ToastGravity.TOP,
+        msg: "Video Selected successfully",
+        backgroundColor: Colors.green,
+      );
+    } else {
+      print("No Video Selected");
+      Fluttertoast.showToast(
+        gravity: ToastGravity.TOP,
+        msg: "No Video Selected",
+        backgroundColor: Colors.red,
+      );
+    }
+    update();
+  }
+
+  ////////////////////////////////////
+
   clearImage() {
     statusImage = null;
+    statusVideo = null;
     update();
   }
 
@@ -57,11 +87,46 @@ class StatusController extends GetxController {
       isLoading.value = true;
       String userUid = authBox.read(KUid);
       FireStorageMethods()
-          .uploadStatusImage(
+          .uploadStatusFile(
               file: statusImage!,
               userUid: userUid,
               statusCaption: statusCaption,
               userImageUrl: userImageUrl,
+              userName: userName,
+              statusDate: DateTime.now(),
+              isVideo: false)
+          .then((value) {
+        isLoading.value = false;
+        Fluttertoast.showToast(
+          gravity: ToastGravity.TOP,
+          msg: "Status Uploaded successfully",
+          backgroundColor: Colors.green,
+        );
+        clearImage();
+        Get.back();
+        update();
+      }).catchError((onError) {
+        isLoading.value = false;
+
+        debugPrint(onError.toString());
+        clearImage();
+        Fluttertoast.showToast(
+          gravity: ToastGravity.TOP,
+          msg: "$onError",
+          backgroundColor: Colors.red,
+        );
+        update();
+      });
+    } else if (statusVideo != null) {
+      isLoading.value = true;
+      String userUid = authBox.read(KUid);
+      FireStorageMethods()
+          .uploadStatusFile(
+              file: statusVideo!,
+              userUid: userUid,
+              statusCaption: statusCaption,
+              userImageUrl: userImageUrl,
+              isVideo: true,
               userName: userName,
               statusDate: DateTime.now())
           .then((value) {
@@ -78,6 +143,7 @@ class StatusController extends GetxController {
         isLoading.value = false;
 
         debugPrint(onError.toString());
+        clearImage();
         Fluttertoast.showToast(
           gravity: ToastGravity.TOP,
           msg: "$onError",
@@ -96,7 +162,8 @@ class StatusController extends GetxController {
               statusCaption: statusCaption,
               userImageUrl: userImageUrl,
               userName: userName,
-              statusDate: DateTime.now())
+              statusDate: DateTime.now(),
+              isVideo: false)
           .then((value) {
         isLoading.value = false;
         Fluttertoast.showToast(

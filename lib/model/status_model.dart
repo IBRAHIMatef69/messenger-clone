@@ -4,6 +4,7 @@ class StatusModel {
   String? statusCaption;
   Timestamp? statusDate;
   String? statusImageUrl;
+  bool? isVideo;
   String? userImageUrl;
   String? userName;
   String? userUid;
@@ -12,6 +13,7 @@ class StatusModel {
     this.statusCaption,
     this.statusDate,
     this.statusImageUrl,
+    this.isVideo,
     this.userImageUrl,
     this.userName,
     this.userUid,
@@ -22,6 +24,7 @@ class StatusModel {
       map['statusCaption'],
       map['statusDate'],
       map['statusImageUrl'],
+      map['isVideo'],
       map['userImageUrl'],
       map['userName'],
       map['userUid'],

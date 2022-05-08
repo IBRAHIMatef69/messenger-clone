@@ -98,6 +98,8 @@ class _CallScreenState extends State<CallScreen> {
           final info = 'User Offline: $uid';
           _infoStrings.add(info);
           users.remove(uid);
+          CallMethods().endCall(call: callController.comingCall.value!);
+
         });
       }, firstRemoteVideoFrame: (uid, width, height, elapsed) {
         setState(() {
@@ -172,7 +174,7 @@ class _CallScreenState extends State<CallScreen> {
             padding: const EdgeInsets.all(12.0),
           ),
           RawMaterialButton(
-            onPressed: () {
+            onPressed: ()async {await
               CallMethods()
                   .endCall(call: callController.comingCall.value!)
                   .then((value) {

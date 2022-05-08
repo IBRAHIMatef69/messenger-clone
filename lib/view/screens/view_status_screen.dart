@@ -1,3 +1,4 @@
+import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -7,19 +8,75 @@ import 'package:store_user/logic/controller/status_controller.dart';
 import 'package:store_user/utils/constants.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
-import 'dart:math' as math;
-import 'dart:ui' as ui;
+
 
 import '../../model/status_model.dart';
 import '../../utils/styles.dart';
 
-class ViewStatusScreen extends StatelessWidget {
+class ViewStatusScreen extends StatefulWidget {
+  @override
+  State<ViewStatusScreen> createState() => _ViewStatusScreenState();
+}
+
+class _ViewStatusScreenState extends State<ViewStatusScreen> {
   StatusModel statusData = Get.arguments[0];
+
   bool isMe = Get.arguments[1];
+
   final statusController = Get.put(StatusController());
+
   final CountdownController countdownController =
       new CountdownController(autoStart: true);
+  late BetterPlayerController _betterPlayerController;
+  @override
+  void initState() {
+    BetterPlayerControlsConfiguration controlsConfiguration =
+    const BetterPlayerControlsConfiguration(
+      controlBarColor: Colors.transparent,
+      iconsColor: Colors.transparent,
+      playIcon: Icons.forward,
+      progressBarPlayedColor: Colors.transparent,
+      progressBarHandleColor: Colors.transparent,
+      enableSkips: false,
+      enableFullscreen: false,
+      controlBarHeight: 0,
+      enableProgressBar: false,
+      enablePlayPause: false,
+      enableMute: false,
+      enablePlaybackSpeed: false,
+      enableProgressBarDrag: false,
+      enableProgressText: false,
+      loadingColor: Colors.white,
+      overflowModalColor: Colors.indigo,
+      overflowModalTextColor: Colors.white,
+      overflowMenuIconsColor: Colors.white,
+      showControls: false,
+      enableOverflowMenu: false,
+      enableRetry: false,
+    );
 
+    BetterPlayerConfiguration betterPlayerConfiguration =
+    BetterPlayerConfiguration(
+        aspectRatio: 16 / 9,
+        autoPlay: true,
+        fit: BoxFit.contain,
+        controlsConfiguration: controlsConfiguration);
+    BetterPlayerDataSource dataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
+      statusData.statusImageUrl!,
+      overriddenDuration: const Duration(seconds: 30),
+    );
+    _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
+   statusData.isVideo!? _betterPlayerController.setupDataSource(dataSource):null;
+    super.initState();
+
+  }
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _betterPlayerController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +90,7 @@ class ViewStatusScreen extends StatelessWidget {
             ),
             Countdown(
               controller: countdownController,
-              seconds: 7,
+              seconds: 666,
               build: (BuildContext context, double time) => SizedBox(
                 height: 3,
                 child: LinearProgressIndicator(
@@ -119,9 +176,12 @@ class ViewStatusScreen extends StatelessWidget {
               },
               onLongPress: () {
                 countdownController.pause();
+                _betterPlayerController.pause();
               },
               onLongPressUp: () {
                 countdownController.resume();
+                _betterPlayerController.play();
+
               },
               child: Container(
                 width: Get.width,
@@ -170,7 +230,17 @@ class ViewStatusScreen extends StatelessWidget {
                           Positioned(
                             top: Get.height * .002,
                             child: Center(
-                              child: Container(
+                              child: statusData.isVideo!?
+
+                              Container( height: Get.height * .8,
+                                child: SizedBox(width: Get.width,
+                                  child: AspectRatio (
+                                    aspectRatio: 16 / 9,
+                                    child: BetterPlayer(controller: _betterPlayerController),
+                                  ),
+                                ),
+                              )  :
+                              Container(
                                 color: Colors.transparent,
                                 width: Get.width,
                                 height: Get.height * .8,
@@ -182,46 +252,48 @@ class ViewStatusScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                  statusData.statusCaption==""?SizedBox():        Positioned(
-                            top: Get.height * .68,
-                            bottom: 10,
-                            child: SingleChildScrollView(
-                              physics: BouncingScrollPhysics(),
-                              child: Container(
-                                color: Colors.black45,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 5),
-                                width: Get.width,
-                                alignment: Alignment.center,
-                                child: ReadMoreText(
-                                  statusData.statusCaption!,
-                                  trimLines: 2,
-                                  trimMode: TrimMode.Line,
-                                  // textDirection: TextDirection.rtl,
+                          statusData.statusCaption == ""
+                              ? SizedBox()
+                              : Positioned(
+                                  top: Get.height * .68,
+                                  bottom: 10,
+                                  child: SingleChildScrollView(
+                                    physics: BouncingScrollPhysics(),
+                                    child: Container(
+                                      color: Colors.black45,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 5),
+                                      width: Get.width,
+                                      alignment: Alignment.center,
+                                      child: ReadMoreText(
+                                        statusData.statusCaption!,
+                                        trimLines: 2,
+                                        trimMode: TrimMode.Line,
+                                        // textDirection: TextDirection.rtl,
 
-                                  textAlign: TextAlign.center,
-                                  trimCollapsedText: " Show More",
-                                  trimExpandedText: " Show Less",
-                                  lessStyle: TextStyle(
-                                    fontWeight: FontWeight.w900,
-                                    color: mainColor2,
+                                        textAlign: TextAlign.center,
+                                        trimCollapsedText: " Show More",
+                                        trimExpandedText: " Show Less",
+                                        lessStyle: TextStyle(
+                                          fontWeight: FontWeight.w900,
+                                          color: mainColor2,
+                                        ),
+                                        // TextStyle
+                                        moreStyle: TextStyle(
+                                          fontWeight: FontWeight.w900,
+                                          color: mainColor2,
+                                        ),
+                                        // TextStyle
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16, height: 1.4,
+                                          color: white,
+                                          // TextStyle
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  // TextStyle
-                                  moreStyle: TextStyle(
-                                    fontWeight: FontWeight.w900,
-                                    color: mainColor2,
-                                  ),
-                                  // TextStyle
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16, height: 1.4,
-                                    color: white,
-                                    // TextStyle
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
+                                )
                         ],
                       ),
               ),
@@ -238,7 +310,7 @@ class ViewStatusScreen extends StatelessWidget {
               builder: (StatusController statusController) {
                 return FloatingActionButton(
                   onPressed: () {
-                    statusController.deleteStatus( Uid: statusData.userUid);
+                    statusController.deleteStatus(Uid: statusData.userUid);
                   },
                   child: statusController.isDeleting.value == false
                       ? Icon(IconBroken.Delete)
