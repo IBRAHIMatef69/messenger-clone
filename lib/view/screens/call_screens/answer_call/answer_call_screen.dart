@@ -32,13 +32,8 @@ class AnswerCallScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Text(
-              "Incoming...",
-              style: TextStyle(
-                fontSize: 30,
-              ),
-            ),
-            SizedBox(height: Get.width * .01),
+
+
             Stack(
               alignment: Alignment.center,
               children: [
@@ -61,6 +56,12 @@ class AnswerCallScreen extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
+              ),
+            ),
+            SizedBox(height: Get.width * .01),         Text(
+              call.isAudioCall?    "Incoming audio call...":"Incoming video call...",
+              style: TextStyle(color: Colors.black54,
+                fontSize: Get.width*.05,
               ),
             ),
             Spacer(),

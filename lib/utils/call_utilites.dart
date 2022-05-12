@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:store_user/api_services/call_methods.dart';
+import 'package:store_user/api_services/fcm_api_handler.dart';
 import 'package:store_user/model/call_model.dart';
 import 'package:store_user/model/user_model.dart';
 import 'package:store_user/view/screens/call_screens/audio_call_screen.dart';
@@ -31,17 +32,23 @@ class CallUtils {
     call.hasDialled = true;
 
     if (callMade) {
-      isAudioCall
-          ? Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AudioCallScreen(call: call),
-              ))
-          : Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => VideoCallScreen(call: call),
-              ));
+      if (isAudioCall) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AudioCallScreen(call: call),
+            ));
+        FcmHandler.sendMessageNotification(
+            to.token!, "audio call ", from.displayName!, from.profileUrl!);
+      } else {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VideoCallScreen(call: call),
+            ));
+        FcmHandler.sendMessageNotification(
+            to.token!, "video call ", from.displayName!, from.profileUrl!);
+      }
     }
   }
 }

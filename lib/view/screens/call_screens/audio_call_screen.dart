@@ -5,12 +5,14 @@ import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:store_user/logic/controller/call_controller.dart';
 import 'package:store_user/api_services/call_methods.dart';
 import 'package:store_user/model/call_model.dart';
 import 'package:store_user/utils/constants.dart';
 import 'package:store_user/utils/my_string.dart';
 import 'package:store_user/view/widgets/utils_widgets/circule_image_avatar.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 
 class AudioCallScreen extends StatefulWidget {
   final Call call;
@@ -31,12 +33,32 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
   final _infoStrings = <String>[];
   bool muted = false;
   ClientRole _role = ClientRole.Broadcaster;
+  final _isHours = true;
+
+  final StopWatchTimer _stopWatchTimer = StopWatchTimer(
+    mode: StopWatchMode.countUp,
+    // onChange: (value) => print('onChange $value'),
+    // onChangeRawSecond: (value) => print('onChangeRawSecond $value'),
+    // onChangeRawMinute: (value) => print('onChangeRawMinute $value'),
+    onStop: () {
+      print('onStop');
+    },
+    onEnded: () {
+      print('onEnded');
+    },
+  );
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initialize();
+    _stopWatchTimer.rawTime.listen((value) => null);
+    // _stopWatchTimer.minuteTime.listen((value) => print('minuteTime $value'));
+    // _stopWatchTimer.secondTime.listen((value) => print('secondTime $value'));
+    // _stopWatchTimer.records.listen((value) => print('records $value'));
+    // _stopWatchTimer.fetchStop.listen((value) => print('stop from stream'));
+    // _stopWatchTimer.fetchEnded.listen((value) => print('ended from stream'));
     addPostFrameCallback();
   }
 
@@ -54,7 +76,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
 
     await RtcEngine.create(APP_ID);
 
-  //  await _engine!.enableVideo();
+    //  await _engine!.enableVideo();
     await _engine!.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine!.setClientRole(_role);
 //! _addAgoraEventHandlers
@@ -92,14 +114,15 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
           final info = 'User Joined: $uid';
           _infoStrings.add(info);
           users.add(uid);
+          _stopWatchTimer.onExecute.add(StopWatchExecute.start);
         });
       }, userOffline: (uid, elapsed) {
         setState(() {
           final info = 'User Offline: $uid';
           _infoStrings.add(info);
           users.remove(uid);
+          _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
           CallMethods().endCall(call: callController.comingCall.value!);
-
         });
       }, firstRemoteVideoFrame: (uid, width, height, elapsed) {
         setState(() {
@@ -174,12 +197,10 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
             padding: const EdgeInsets.all(12.0),
           ),
           RawMaterialButton(
-            onPressed: ()async {await
-            CallMethods()
-                .endCall(call: callController.comingCall.value!)
-                .then((value) {
-              Navigator.pop(context);
-            });
+            onPressed: () async {
+              await CallMethods()
+                  .endCall(call: callController.comingCall.value!)
+                  .then((value) {});
             },
             child: const Icon(
               Icons.call_end,
@@ -192,35 +213,35 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
             fillColor: Colors.redAccent,
             padding: const EdgeInsets.all(15.0),
           ),
-        widget.call.isAudioCall?RawMaterialButton(
-          onPressed: () {
-
-          },
-          child: const Icon(
-            Icons.switch_camera,
-            color: Colors.transparent,
-            size: 20.0,
-          ),
-          // Icon
-          shape: const CircleBorder(),
-          elevation: 0,
-          fillColor: Colors.transparent,
-          padding: const EdgeInsets.all(12.0),
-        ):  RawMaterialButton(
-            onPressed: () {
-              _engine!.switchCamera();
-            },
-            child: const Icon(
-              Icons.switch_camera,
-              color: Colors.blueAccent,
-              size: 20.0,
-            ),
-            // Icon
-            shape: const CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.white,
-            padding: const EdgeInsets.all(12.0),
-          )
+          widget.call.isAudioCall
+              ? RawMaterialButton(
+                  onPressed: () {},
+                  child: const Icon(
+                    Icons.switch_camera,
+                    color: Colors.transparent,
+                    size: 20.0,
+                  ),
+                  // Icon
+                  shape: const CircleBorder(),
+                  elevation: 0,
+                  fillColor: Colors.transparent,
+                  padding: const EdgeInsets.all(12.0),
+                )
+              : RawMaterialButton(
+                  onPressed: () {
+                    _engine!.switchCamera();
+                  },
+                  child: const Icon(
+                    Icons.switch_camera,
+                    color: Colors.blueAccent,
+                    size: 20.0,
+                  ),
+                  // Icon
+                  shape: const CircleBorder(),
+                  elevation: 2.0,
+                  fillColor: Colors.white,
+                  padding: const EdgeInsets.all(12.0),
+                )
         ],
       ), // Row
     );
@@ -235,9 +256,8 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
         // defining the logic
         switch (ds.exists) {
           case false:
-          // snapshot is null which means that call is hanged and documents are deleted
+            // snapshot is null which means that call is hanged and documents are deleted
             Navigator.pop(context);
-
 
             break;
 
@@ -249,7 +269,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     // TODO: implement dispose
     super.dispose();
     users.clear();
@@ -257,6 +277,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     _engine!.leaveChannel();
     _engine!.destroy();
     callStreamSubscription!.cancel();
+    await _stopWatchTimer.dispose();
   }
 
   @override
@@ -265,119 +286,102 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
       backgroundColor: homeBackGroundColor,
       body: Center(
         child: Stack(children: [
-      //    _viewRows(),
+          //    _viewRows(),
           _toolbar(),
           users.length == 0 && widget.call.callerId == callController.myUid
               ? Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(vertical: 100),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                CirculeImageAvatar(
-                  color: black,
-                  imageUrl: widget.call.receiverPic,
-                  width: Get.width * .3,
-                  openImageViewer: false,
-                ),
-                SizedBox(
-                  height: Get.height * .01,
-                ),
-                Text(
-                  widget.call.receiverName,
-                  style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: Get.width * .08,
-                      fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  "Calling...",
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: Get.width * .04,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(vertical: 100),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      CirculeImageAvatar(
+                        color: black,
+                        imageUrl: widget.call.receiverPic,
+                        width: Get.width * .3,
+                        openImageViewer: false,
+                      ),
+                      SizedBox(
+                        height: Get.height * .01,
+                      ),
+                      Text(
+                        widget.call.receiverName,
+                        style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: Get.width * .08,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "Calling...",
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: Get.width * .04,
+                        ),
+                      ),
+                      Spacer(),
+                    ],
                   ),
-                ),
-                Spacer(),
-                // Card(
-                //   elevation: 4,
-                //   shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(50)),
-                //   child: InkWell(
-                //     onTap: () async {
-                //       CallMethods().endCall(call: widget.call);
-                //     },
-                //     child: Padding(
-                //       padding: const EdgeInsets.all(10.0),
-                //       child: Transform.rotate(
-                //         angle: 3,
-                //         child: Icon(
-                //           IconBroken.Call,
-                //           size: Get.width * .12,
-                //           color: Colors.redAccent,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ],
-            ),
-          )
+                )
               : SizedBox(),
           users.length != 0
               ? Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(vertical: 100),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                CirculeImageAvatar(
-                  color: black,
-                  imageUrl: widget.call.receiverPic,
-                  width: Get.width * .3,
-                  openImageViewer: false,
-                ),
-                SizedBox(
-                  height: Get.height * .01,
-                ),
-                Text(
-                  widget.call.receiverName,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: Get.width * .08,
-                      fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  "Calling with ${ widget.call.receiverName} ",
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: Get.width * .04,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(vertical: 100),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      CirculeImageAvatar(
+                        color: black,
+                        imageUrl:
+                        widget.call.receiverId==callController.myUid?
+                        widget.call.callerPic:widget.call.receiverPic,
+                        width: Get.width * .3,
+                        openImageViewer: false,
+                      ),
+                      SizedBox(
+                        height: Get.height * .01,
+                      ),
+                      Text(
+                        widget.call.receiverId == callController.myUid
+                            ? widget.call.callerName
+                            : widget.call.receiverName,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Get.width * .08,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        widget.call.receiverId == callController.myUid
+                            ? "Calling with ${widget.call.callerName} "
+                            : "Calling with ${widget.call.receiverName} ",
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: Get.width * .04,
+                        ),
+                      ),
+                      StreamBuilder<int>(
+                        stream: _stopWatchTimer.rawTime,
+                        initialData: _stopWatchTimer.rawTime.value,
+                        builder: (context, snap) {
+                          final value = snap.data!;
+                          final displayTime = StopWatchTimer.getDisplayTime(
+                              value,
+                              hours: _isHours,
+                              milliSecond: false);
+                          return Text(
+                            displayTime,
+                            style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: Get.width * .03,
+                                fontWeight: FontWeight.w500),
+                          );
+                        },
+                      ),
+                      Spacer(),
+                    ],
                   ),
-                ),
-                Spacer(),
-                // Card(
-                //   elevation: 4,
-                //   shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(50)),
-                //   child: InkWell(
-                //     onTap: () async {
-                //       CallMethods().endCall(call: widget.call);
-                //     },
-                //     child: Padding(
-                //       padding: const EdgeInsets.all(10.0),
-                //       child: Transform.rotate(
-                //         angle: 3,
-                //         child: Icon(
-                //           IconBroken.Call,
-                //           size: Get.width * .12,
-                //           color: Colors.redAccent,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ],
-            ),
-          )
+                )
               : SizedBox()
         ]),
       ),
