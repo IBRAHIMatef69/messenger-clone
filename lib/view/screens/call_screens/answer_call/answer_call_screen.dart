@@ -7,9 +7,9 @@ import 'package:store_user/api_services/call_methods.dart';
 import 'package:store_user/model/call_model.dart';
 import 'package:store_user/api_services/permission_services.dart';
 import 'package:store_user/utils/styles.dart';
-import 'package:store_user/view/screens/call_screens/call_screen.dart';
+import 'package:store_user/view/screens/call_screens/audio_call_screen.dart';
+import 'package:store_user/view/screens/call_screens/video_call_screen.dart';
 import 'package:store_user/view/widgets/utils_widgets/circule_image_avatar.dart';
-
 import '../../../../utils/constants.dart';
 
 class AnswerCallScreen extends StatelessWidget {
@@ -97,12 +97,21 @@ class AnswerCallScreen extends StatelessWidget {
                     onTap: () async => await Permissions
                                 .cameraAndMicrophonePermissionsGranted() &&
                             call.channelId.isNotEmpty
-                        ? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CallScreen(call: call),
-                            ),
-                          )
+                        ? call.isAudioCall
+                            ? Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      AudioCallScreen(call: call),
+                                ),
+                              )
+                            : Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      VideoCallScreen(call: call),
+                                ),
+                              )
                         : {},
                     borderRadius: BorderRadius.circular(50),
                     child: Padding(

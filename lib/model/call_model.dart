@@ -6,6 +6,7 @@ class Call {
   String receiverName;
   String receiverPic;
   String channelId;
+  bool isAudioCall;
   bool? hasDialled;
 
   Call({
@@ -16,6 +17,7 @@ class Call {
     required this.receiverName,
     required this.receiverPic,
     required this.channelId,
+    required this.isAudioCall,
       this.hasDialled,
   });
 
@@ -29,6 +31,7 @@ class Call {
     callMap["receiver_name"] = call.receiverName;
     callMap["receiver_pic"] = call.receiverPic;
     callMap["channel_id"] = call.channelId;
+    callMap["isAudioCall"] = call.isAudioCall;
     callMap["has_dialled"] = call.hasDialled;
     return callMap;
   }
@@ -42,6 +45,7 @@ class Call {
       receiverName: map['receiver_name'],
       receiverPic: map['receiver_pic'],
       channelId: map['channel_id'],
+      isAudioCall: map['isAudioCall'],
       hasDialled: map['has_dialled'],
     );
   }

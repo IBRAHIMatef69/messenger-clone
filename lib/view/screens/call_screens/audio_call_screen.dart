@@ -12,18 +12,18 @@ import 'package:store_user/utils/constants.dart';
 import 'package:store_user/utils/my_string.dart';
 import 'package:store_user/view/widgets/utils_widgets/circule_image_avatar.dart';
 
-class CallScreen extends StatefulWidget {
+class AudioCallScreen extends StatefulWidget {
   final Call call;
 
-  CallScreen({
+  AudioCallScreen({
     required this.call,
   });
 
   @override
-  State<CallScreen> createState() => _CallScreenState();
+  State<AudioCallScreen> createState() => _AudioCallScreenState();
 }
 
-class _CallScreenState extends State<CallScreen> {
+class _AudioCallScreenState extends State<AudioCallScreen> {
   final callController = Get.put(CallController());
   StreamSubscription? callStreamSubscription;
   RtcEngine? _engine;
@@ -54,7 +54,7 @@ class _CallScreenState extends State<CallScreen> {
 
     await RtcEngine.create(APP_ID);
 
-    await _engine!.enableVideo();
+  //  await _engine!.enableVideo();
     await _engine!.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine!.setClientRole(_role);
 //! _addAgoraEventHandlers
@@ -110,43 +110,43 @@ class _CallScreenState extends State<CallScreen> {
     );
   }
 
-  Widget _viewRows() {
-    final List<StatefulWidget> list = [];
-    if (_role == ClientRole.Broadcaster) {
-      list.add(const rtc_local_view.SurfaceView());
-    }
-    for (var uid in users) {
-      list.add(rtc_remote_view.SurfaceView(
-        uid: uid,
-        channelId: callController.comingCall.value!.channelId,
-      ));
-    }
-    final views = list;
-    return Column(
-      children: List.generate(
-        views.length,
-        (index) => Expanded(
-          child: views[index],
-        ), // Expanded
-      ), // List.generate
-    );
-    // return Stack(
-    //   children: [
-    //     Expanded(child: views[0]),
-    //     views.length > 1
-    //         ? Positioned(
-    //             right: Get.width * .1,
-    //             top: Get.width * .1,
-    //             child: SizedBox(
-    //               width: Get.width * .3,
-    //               height: Get.height * .3,
-    //               child: views[1],
-    //             ),
-    //           )
-    //         : SizedBox()
-    //   ],
-    // );
-  }
+  // Widget _viewRows() {
+  //   final List<StatefulWidget> list = [];
+  //   if (_role == ClientRole.Broadcaster) {
+  //     list.add(const rtc_local_view.SurfaceView());
+  //   }
+  //   for (var uid in users) {
+  //     list.add(rtc_remote_view.SurfaceView(
+  //       uid: uid,
+  //       channelId: callController.comingCall.value!.channelId,
+  //     ));
+  //   }
+  //   final views = list;
+  //   return Column(
+  //     children: List.generate(
+  //       views.length,
+  //           (index) => Expanded(
+  //         child: views[index],
+  //       ), // Expanded
+  //     ), // List.generate
+  //   );
+  //   // return Stack(
+  //   //   children: [
+  //   //     Expanded(child: views[0]),
+  //   //     views.length > 1
+  //   //         ? Positioned(
+  //   //             right: Get.width * .1,
+  //   //             top: Get.width * .1,
+  //   //             child: SizedBox(
+  //   //               width: Get.width * .3,
+  //   //               height: Get.height * .3,
+  //   //               child: views[1],
+  //   //             ),
+  //   //           )
+  //   //         : SizedBox()
+  //   //   ],
+  //   // );
+  // }
 
   Widget _toolbar() {
     return Container(
@@ -175,11 +175,11 @@ class _CallScreenState extends State<CallScreen> {
           ),
           RawMaterialButton(
             onPressed: ()async {await
-              CallMethods()
-                  .endCall(call: callController.comingCall.value!)
-                  .then((value) {
-                Navigator.pop(context);
-              });
+            CallMethods()
+                .endCall(call: callController.comingCall.value!)
+                .then((value) {
+              Navigator.pop(context);
+            });
             },
             child: const Icon(
               Icons.call_end,
@@ -192,7 +192,21 @@ class _CallScreenState extends State<CallScreen> {
             fillColor: Colors.redAccent,
             padding: const EdgeInsets.all(15.0),
           ),
-          RawMaterialButton(
+        widget.call.isAudioCall?RawMaterialButton(
+          onPressed: () {
+
+          },
+          child: const Icon(
+            Icons.switch_camera,
+            color: Colors.transparent,
+            size: 20.0,
+          ),
+          // Icon
+          shape: const CircleBorder(),
+          elevation: 0,
+          fillColor: Colors.transparent,
+          padding: const EdgeInsets.all(12.0),
+        ):  RawMaterialButton(
             onPressed: () {
               _engine!.switchCamera();
             },
@@ -221,8 +235,9 @@ class _CallScreenState extends State<CallScreen> {
         // defining the logic
         switch (ds.exists) {
           case false:
-            // snapshot is null which means that call is hanged and documents are deleted
+          // snapshot is null which means that call is hanged and documents are deleted
             Navigator.pop(context);
+
 
             break;
 
@@ -247,66 +262,122 @@ class _CallScreenState extends State<CallScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: black,
+      backgroundColor: homeBackGroundColor,
       body: Center(
         child: Stack(children: [
-          _viewRows(),
+      //    _viewRows(),
           _toolbar(),
           users.length == 0 && widget.call.callerId == callController.myUid
               ? Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(vertical: 100),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      CirculeImageAvatar(
-                        color: homeBackGroundColor,
-                        imageUrl: widget.call.receiverPic,
-                        width: Get.width * .3,
-                        openImageViewer: false,
-                      ),
-                      SizedBox(
-                        height: Get.height * .01,
-                      ),
-                      Text(
-                        widget.call.receiverName,
-                        style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: Get.width * .08,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "Calling...",
-                        style: TextStyle(
-                          color: Colors.white54,
-                          fontSize: Get.width * .04,
-                        ),
-                      ),
-                      Spacer(),
-                      // Card(
-                      //   elevation: 4,
-                      //   shape: RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.circular(50)),
-                      //   child: InkWell(
-                      //     onTap: () async {
-                      //       CallMethods().endCall(call: widget.call);
-                      //     },
-                      //     child: Padding(
-                      //       padding: const EdgeInsets.all(10.0),
-                      //       child: Transform.rotate(
-                      //         angle: 3,
-                      //         child: Icon(
-                      //           IconBroken.Call,
-                      //           size: Get.width * .12,
-                      //           color: Colors.redAccent,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(vertical: 100),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                CirculeImageAvatar(
+                  color: black,
+                  imageUrl: widget.call.receiverPic,
+                  width: Get.width * .3,
+                  openImageViewer: false,
+                ),
+                SizedBox(
+                  height: Get.height * .01,
+                ),
+                Text(
+                  widget.call.receiverName,
+                  style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: Get.width * .08,
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "Calling...",
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: Get.width * .04,
                   ),
-                )
+                ),
+                Spacer(),
+                // Card(
+                //   elevation: 4,
+                //   shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(50)),
+                //   child: InkWell(
+                //     onTap: () async {
+                //       CallMethods().endCall(call: widget.call);
+                //     },
+                //     child: Padding(
+                //       padding: const EdgeInsets.all(10.0),
+                //       child: Transform.rotate(
+                //         angle: 3,
+                //         child: Icon(
+                //           IconBroken.Call,
+                //           size: Get.width * .12,
+                //           color: Colors.redAccent,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
+          )
+              : SizedBox(),
+          users.length != 0
+              ? Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(vertical: 100),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                CirculeImageAvatar(
+                  color: black,
+                  imageUrl: widget.call.receiverPic,
+                  width: Get.width * .3,
+                  openImageViewer: false,
+                ),
+                SizedBox(
+                  height: Get.height * .01,
+                ),
+                Text(
+                  widget.call.receiverName,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Get.width * .08,
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "Calling with ${ widget.call.receiverName} ",
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: Get.width * .04,
+                  ),
+                ),
+                Spacer(),
+                // Card(
+                //   elevation: 4,
+                //   shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(50)),
+                //   child: InkWell(
+                //     onTap: () async {
+                //       CallMethods().endCall(call: widget.call);
+                //     },
+                //     child: Padding(
+                //       padding: const EdgeInsets.all(10.0),
+                //       child: Transform.rotate(
+                //         angle: 3,
+                //         child: Icon(
+                //           IconBroken.Call,
+                //           size: Get.width * .12,
+                //           color: Colors.redAccent,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
+          )
               : SizedBox()
         ]),
       ),

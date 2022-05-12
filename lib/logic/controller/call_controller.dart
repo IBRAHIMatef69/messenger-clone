@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:store_user/model/call_model.dart';
@@ -31,8 +32,12 @@ class CallController extends GetxController {
         .snapshots()
         .listen((event) async {
       if (event.exists) {
+
         comingCall.value = Call.fromMap(event);
         isComingCall.value = true;
+
+
+        update();
       } else {
         isComingCall.value = false;
       }

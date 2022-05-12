@@ -33,6 +33,7 @@ class MessagesController extends GetxController {
   Codec _codec = Codec.aacMP4;
   bool isRecorderReady = false;
   RxBool isRecording = false.obs;
+  RxBool isSending = false.obs;
 
   /////////////////////////////////////// Play audio  //////////////////
 
@@ -85,6 +86,7 @@ class MessagesController extends GetxController {
     audioFile = File(path!);
     if (path != null) {
       try {
+        isSending.value = true;
         FireStorageMethods()
             .uploadFile(
           audioFile!,
@@ -95,18 +97,22 @@ class MessagesController extends GetxController {
           senderName,
         )
             .then((value) {
+          isSending.value = false;
           Fluttertoast.showToast(
               gravity: ToastGravity.TOP,
               msg: "voice Record sent successfully",
               backgroundColor: Colors.green);
         }).catchError((e) {
+          isSending.value = false;
           Fluttertoast.showToast(
             gravity: ToastGravity.TOP,
             msg: "$e",
             backgroundColor: Colors.red,
           );
         });
-      } catch (e) {}
+      } catch (e) {
+        isSending.value = false;
+      }
     } else {
       print("No Audio Selected");
       Fluttertoast.showToast(
@@ -226,7 +232,11 @@ class MessagesController extends GetxController {
     if (pickedFile != null) {
       try {
         video = await File(pickedFile.path);
-        Get.back();
+        Get.back();        Fluttertoast.showToast(
+            gravity: ToastGravity.TOP,
+            msg: "video Picked successfully",
+            backgroundColor: Colors.green);
+        isSending.value = true;
         FireStorageMethods()
             .uploadFile(
           video!,
@@ -237,6 +247,7 @@ class MessagesController extends GetxController {
           senderName,
         )
             .then((value) {
+          isSending.value = false;
           Fluttertoast.showToast(
               gravity: ToastGravity.TOP,
               msg: "video sent successfully",
@@ -244,6 +255,7 @@ class MessagesController extends GetxController {
           update();
         });
       } catch (e) {
+        isSending.value = false;
         Fluttertoast.showToast(
           gravity: ToastGravity.TOP,
           msg: "$e",
@@ -274,8 +286,12 @@ class MessagesController extends GetxController {
         image = await File(
           pickedImage.path,
         );
-
+        Fluttertoast.showToast(
+            gravity: ToastGravity.TOP,
+            msg: "image Picked successfully",
+            backgroundColor: Colors.green);
         // Get.back();
+        isSending.value = true;
         FireStorageMethods()
             .uploadFile(
           image!,
@@ -286,17 +302,20 @@ class MessagesController extends GetxController {
           senderName,
         )
             .then((value) {
+          isSending.value = false;
           Fluttertoast.showToast(
               gravity: ToastGravity.TOP,
               msg: "Image sent successfully",
               backgroundColor: Colors.green);
           update();
+        }).catchError((onError) {
+          Fluttertoast.showToast(
+              gravity: ToastGravity.TOP,
+              msg: "${onError}",
+              backgroundColor: Colors.red);
         });
-        Fluttertoast.showToast(
-            gravity: ToastGravity.TOP,
-            msg: "image Picked successfully",
-            backgroundColor: Colors.green);
       } catch (e) {
+        isSending.value = false;
         Fluttertoast.showToast(
           gravity: ToastGravity.TOP,
           msg: "$e",
@@ -326,7 +345,7 @@ class MessagesController extends GetxController {
   }) async {
     if (messageTextController.text != "") {
       String message = messageTextController.text;
-
+      messageTextController.clear();
       var lastMessageTs = DateTime.now();
 
 //messageId
@@ -342,13 +361,18 @@ class MessagesController extends GetxController {
         "senderName": senderName,
         "ts": lastMessageTs,
       };
+      isSending.value = true;
       FireStoreMethods()
           .addMessage(chatRoomId, messageId, messageInfoMap)
           .then((value) async {
+        isSending.value = false;
+        messageTextController.clear();
+        isWriting.value = false;
         await FcmHandler.sendMessageNotification(
           friendToken,
           message,
-          senderName,senderImage,
+          senderName,
+          senderImage,
         );
         Map<String, dynamic> lastMessageInfoMap = {
           "lastMessage": message,
@@ -370,6 +394,12 @@ class MessagesController extends GetxController {
 
           messageId = "";
         }
+      }).catchError((onError) {
+        isSending.value = false;
+        Fluttertoast.showToast(
+            gravity: ToastGravity.TOP,
+            msg: "${onError}",
+            backgroundColor: Colors.red);
       });
     }
   }
@@ -400,9 +430,11 @@ class MessagesController extends GetxController {
         "messageId": messageId,
         "ts": lastMessageTs,
       };
+      isSending.value = true;
       FireStoreMethods()
           .addMessage(chatRoomId, messageId, messageInfoMap)
           .then((value) async {
+        isSending.value = false;
         Map<String, dynamic> lastMessageInfoMap = {
           "lastMessage": message,
           "lastMessageSendTs": lastMessageTs,
@@ -419,6 +451,11 @@ class MessagesController extends GetxController {
           messageId = "";
           update();
         }
+      }).catchError((onError) {isSending.value=false;
+        Fluttertoast.showToast(
+            gravity: ToastGravity.TOP,
+            msg: "${onError}",
+            backgroundColor: Colors.red);
       });
     }
   }
@@ -451,7 +488,10 @@ class MessagesController extends GetxController {
           msg: "Deleted successfully",
           backgroundColor: Colors.red.shade400);
       FireStoreMethods().updateLastMessageSend(chatRoomId, lastMessageInfoMap);
-    });
+    }).catchError((onError){        Fluttertoast.showToast(
+        gravity: ToastGravity.TOP,
+        msg: "${onError}",
+        backgroundColor: Colors.red);});
   }
 
   ////////////////////////////////////

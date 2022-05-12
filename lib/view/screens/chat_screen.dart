@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
-import 'package:spring/spring.dart';
 import 'package:store_user/utils/call_utilites.dart';
 import 'package:store_user/api_services/fcm_api_handler.dart';
 import 'package:store_user/api_services/permission_services.dart';
@@ -32,7 +31,16 @@ class ChatScreen extends StatelessWidget {
           actions: [
             IconButton(
                 padding: EdgeInsets.zero,
-                onPressed: () {},
+                onPressed: () async {
+                  await Permissions.cameraAndMicrophonePermissionsGranted()
+                      ? CallUtils.dial(
+                          from: myData,
+                          to: friendData,
+                          context: context,
+                          isAudioCall: true,
+                        )
+                      : {};
+                },
                 icon: Icon(
                   IconBroken.Call,
                   color: Colors.black,
@@ -45,6 +53,7 @@ class ChatScreen extends StatelessWidget {
                           from: myData,
                           to: friendData,
                           context: context,
+                          isAudioCall: false,
                         )
                       : {};
                 },
@@ -183,6 +192,14 @@ class ChatScreen extends StatelessWidget {
                       });
                 },
               )),
+              Obx(() {
+                return messagesController.isSending.value
+                    ? Container(
+                        child: LinearProgressIndicator(
+                            color: mainColor2, minHeight: 2),
+                      )
+                    : SizedBox();
+              }),
               Container(
                 decoration: BoxDecoration(
                   boxShadow: [

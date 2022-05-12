@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
  import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:store_user/routes/routes.dart';
-
 import 'package:get_storage/get_storage.dart';
 import 'package:store_user/utils/constants.dart';
 
@@ -16,6 +15,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint("on ${message.notification!.body} message ");
   print(message.notification!.body.toString());
 
+
   Fluttertoast.showToast(
     gravity: ToastGravity.TOP,
     msg: "New message from " + message.notification!.title.toString(),
@@ -24,6 +24,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
+
+
   //بيتاكد ان كل حاجه هنا خلصانه وبعدين يفتح التطبيق
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -45,9 +47,7 @@ void main() async {
     provisional: true,
     sound: true,
   );
-  FirebaseMessaging.onMessage.listen((event) {
-
-
+  FirebaseMessaging.onMessage.listen((message) {
 
 
   });

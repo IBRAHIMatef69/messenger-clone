@@ -22,9 +22,9 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
   StatusModel statusData = Get.arguments[0];
 
   bool isMe = Get.arguments[1];
-
+  final player = AudioPlayer();
   final statusController = Get.put(StatusController());
-  Duration? duration = Get.arguments[2];
+  Duration? duration;
 
   // final player = AudioPlayer();
   final CountdownController countdownController =
@@ -74,6 +74,13 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
     statusData.isVideo!
         ? _betterPlayerController.setupDataSource(dataSource)
         : null;
+
+    statusData.isVideo!
+        ? player.setUrl(statusData.statusImageUrl!).then((value) {
+            duration = value;
+            setState(() {});
+          })
+        : null;
     super.initState();
   }
 
@@ -82,8 +89,8 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
     // TODO: implement dispose
     super.dispose();
     _betterPlayerController.dispose();
-    duration=Duration.zero;
-
+    player.dispose();
+    duration = Duration.zero;
   }
 
   @override
@@ -99,10 +106,12 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
             ),
             Countdown(
               controller: countdownController,
-              seconds: statusData.isVideo! && duration != null
-                  ? duration!.inSeconds > 30
-                      ? 30
-                      : duration!.inSeconds
+              seconds: statusData.isVideo!
+                  ? duration == null
+                      ? 500
+                      : duration!.inSeconds > 30
+                          ? 30
+                          : duration!.inSeconds
                   : 7,
               build: (BuildContext context, double time) => SizedBox(
                 height: 3,
@@ -110,16 +119,20 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
                   color: mainColor2,
                   backgroundColor: mainColor2,
                   valueColor: AlwaysStoppedAnimation<Color>(white),
-                  value: statusData.isVideo! && duration != null
-                      ? duration!.inSeconds > 30
-                          ? 30
-                          : time / duration!.inSeconds
+                  value: statusData.isVideo!
+                      ? duration == null
+                          ? time / 500
+                          : duration!.inSeconds > 30
+                              ? time / 30
+                              : time / duration!.inSeconds
                       : time / 7,
                 ),
               ),
               interval: Duration(milliseconds: 10),
               onFinished: () {
                 Get.back();
+                // _betterPlayerController.dispose();
+                // player.dispose();
                 print('Timer is done!');
               },
             ),
@@ -249,15 +262,26 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
                               child: statusData.isVideo!
                                   ? Container(
                                       height: Get.height * .8,
-                                      child: SizedBox(
-                                        width: Get.width,
-                                        child: AspectRatio(
-                                          aspectRatio: 16 / 9,
-                                          child: BetterPlayer(
-                                              controller:
-                                                  _betterPlayerController),
-                                        ),
-                                      ),
+                                      child: duration == null
+                                          ? SizedBox(
+                                              width: Get.width,
+                                              child: AspectRatio(
+                                                aspectRatio: 16 / 9,
+                                                child:
+                                                Image.asset(
+                                                    "assets/images/video_l.gif"),
+
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              width: Get.width,
+                                              child: AspectRatio(
+                                                aspectRatio: 16 / 9,
+                                                child: BetterPlayer(
+                                                    controller:
+                                                        _betterPlayerController),
+                                              ),
+                                            ),
                                     )
                                   : Container(
                                       color: Colors.transparent,

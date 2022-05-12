@@ -13,8 +13,7 @@ import '../utils_widgets/text_utils.dart';
 class StatusWidget extends StatelessWidget {
   StatusModel statusModel;
   bool isMe;
-  Duration? duration;
-  final player = AudioPlayer();
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +24,8 @@ class StatusWidget extends StatelessWidget {
           builder: (StatusController controller) {
             return InkWell(
               onTap: () {
-                if (statusModel.isVideo==true){
-                  player.setUrl(statusModel.statusImageUrl!).then((value) {
-
-                      duration = value;
-                      Get.toNamed(Routes.viewStatusScreen,
-                          arguments: [statusModel, isMe,duration]);
-                  });
-
-                }else{  Get.toNamed(Routes.viewStatusScreen,
-                    arguments: [statusModel, isMe,duration=Duration.zero]);}
+                Get.toNamed(Routes.viewStatusScreen,
+                    arguments: [statusModel, isMe]);
 
               },
               child: Container(
