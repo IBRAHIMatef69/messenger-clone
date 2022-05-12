@@ -63,6 +63,8 @@ dependencies:
   agora_rtc_engine: ^5.1.0
   voice_message_package: ^0.0.66
   stop_watch_timer: ^1.4.0
+  connectivity_plus: ^2.3.0
+  conditional_builder_null_safety:
 
 
 

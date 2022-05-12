@@ -9,7 +9,7 @@ class SplashController extends GetxController {
   void onInit() async {
     GetStorage authBox = GetStorage();
     // TODO: implement onInit
-    Future.delayed(const Duration(seconds: 0), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Get.offNamed(
           authBox.read(KUid) == null ? Routes.loginScreen : Routes.mainScreen);
     });

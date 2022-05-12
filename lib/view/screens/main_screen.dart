@@ -1,7 +1,10 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
- import 'package:store_user/logic/controller/chat_rooms_controller.dart';
+import 'package:lottie/lottie.dart';
+import 'package:store_user/logic/controller/chat_rooms_controller.dart';
 import 'package:store_user/logic/controller/main_controller.dart';
 import 'package:store_user/routes/routes.dart';
 import 'package:store_user/utils/constants.dart';
@@ -24,85 +27,126 @@ class MainScreen extends StatelessWidget {
     return AnswerCallWrapLayout(
       scaffold: Scaffold(
           backgroundColor: homeBackGroundColor,
-          body: RefreshIndicator(
-            backgroundColor: homeBackGroundColor,
-            color: mainColor2,
-            onRefresh: () {
-              controller.getAllUsers();
-              chatRoomController.getAllChatRooms();
-              statusController.getOnlyMyStatus();
-              statusController.getMyFriendsStatus();
-
-              return controller.getUserData();
+          body: Obx((){return ConditionalBuilder(
+            condition: controller.internetStatus.value == true,
+            fallback: (BuildContext context) {
+              return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: Get.height * .2,
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.height * .1,
+                        height: MediaQuery.of(context).size.height * .1,
+                        child: Lottie.asset(
+                          "assets/images/connection.json",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Text(
+                        "check your internet connection",
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.black54),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * .2,
+                      )
+                    ],
+                  ));
             },
-            child: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  actions: [
-                    IconButton(
-                        onPressed: () {
-                          SystemChannels.textInput.invokeMethod('TextInput.hide');
+            builder: (BuildContext context) {
+              return RefreshIndicator(
+                backgroundColor: homeBackGroundColor,
+                color: mainColor2,
+                onRefresh: () {
+                  controller.getAllUsers();
+                  chatRoomController.getAllChatRooms();
+                  statusController.getOnlyMyStatus();
+                  statusController.getMyFriendsStatus();
 
-                          Get.toNamed(Routes.settingProfileScreen);
-                        },
-                        icon: Icon(
-                          IconBroken.Setting,
-                          color: homeBackGroundColor,
-                        ))
-                  ],
-                  elevation: 2,
-                  floating: true,
-                  leading: Container(
-                    margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.zero,
-                    child: Obx(
-                      () {
-                        return controller.userInfoModel.value == null
-                            ? CirculeImageAvatar(
-                                width: Get.width,
-                                imageUrl:
-                                    "https://www.stockvault.net//data/2008/04/28/104980/thumb16.jpg",
-                              )
-                            : CirculeImageAvatar(
-                                width: Get.width,
-                                imageUrl: controller
-                                    .userInfoModel.value!.profileUrl!
-                                    .toString(),
-                              );
-                      },
-                    ),
-                  ),
-                  backgroundColor: mainColor2,
-                  title: KTextUtils(
-                      text: "chats",
-                      size: 25,
-                      color: white,
-                      fontWeight: FontWeight.bold,
-                      textDecoration: TextDecoration.none),
-                ),
-                SliverToBoxAdapter(child: SearchWidget()),
-                SliverToBoxAdapter(child: OnlineUsersChat()),
-                SliverToBoxAdapter(
-                  child: Obx(() {
-                    return Container(
-                      alignment: Alignment.topLeft,
-                      margin: EdgeInsets.only(left: Get.width * .03, top: 0),
-                      padding: EdgeInsets.zero,
-                      child: KTextUtils(
-                          text: controller.isSearching.value == false
-                              ? "Messages"
-                              : "Users",
-                          size: Get.width * .07,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w700,
+                  return controller.getUserData();
+                },
+                child: CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      actions: [
+                        IconButton(
+                            onPressed: () {
+                              SystemChannels.textInput
+                                  .invokeMethod('TextInput.hide');
+
+                              Get.toNamed(Routes.settingProfileScreen);
+                            },
+                            icon: Icon(
+                              IconBroken.Setting,
+                              color: homeBackGroundColor,
+                            ))
+                      ],
+                      elevation: 2,
+                      floating: true,
+                      leading: Container(
+                        margin: EdgeInsets.all(5),
+                        padding: EdgeInsets.zero,
+                        child: Obx(
+                              () {
+                            return controller.userInfoModel.value == null
+                                ? CirculeImageAvatar(
+                              width: Get.width,
+                              imageUrl:
+                              "https://www.stockvault.net//data/2008/04/28/104980/thumb16.jpg",
+                            )
+                                : CirculeImageAvatar(
+                              width: Get.width,
+                              imageUrl: controller
+                                  .userInfoModel.value!.profileUrl!
+                                  .toString(),
+                            );
+                          },
+                        ),
+                      ),
+                      backgroundColor: mainColor2,
+                      title: KTextUtils(
+                          text: "chats",
+                          size: 25,
+                          color: white,
+                          fontWeight: FontWeight.bold,
                           textDecoration: TextDecoration.none),
-                    );
-                  }),
+                    ),
+                    SliverToBoxAdapter(child: SearchWidget()),
+                    SliverToBoxAdapter(child: OnlineUsersChat()),
+                    SliverToBoxAdapter(
+                      child: Obx(() {
+                        return Container(
+                          alignment: Alignment.topLeft,
+                          margin:
+                          EdgeInsets.only(left: Get.width * .03, top: 0),
+                          padding: EdgeInsets.zero,
+                          child: KTextUtils(
+                              text: controller.isSearching.value == false
+                                  ? "Messages"
+                                  : "Users",
+                              size: Get.width * .07,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w700,
+                              textDecoration: TextDecoration.none),
+                        );
+                      }),
+                    ),
+                    SliverToBoxAdapter(child: ChatListViewChatRoomsList())
+                  ],
                 ),
-                SliverToBoxAdapter(child: ChatListViewChatRoomsList())
-              ],
-            ),
-          )),
+              );
+            },
+          );})),
     );
   }
 }

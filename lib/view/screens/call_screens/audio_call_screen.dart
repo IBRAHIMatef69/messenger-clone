@@ -187,13 +187,13 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
             },
             child: Icon(
               muted ? Icons.mic_off : Icons.mic,
-              color: muted ? Colors.white : Colors.blueAccent,
+              color: muted ? white : mainColor2,
               size: 20.0,
             ),
             // Icon
             shape: const CircleBorder(),
             elevation: 2.0,
-            fillColor: muted ? Colors.blueAccent : Colors.white,
+            fillColor: muted ? mainColor2 : white,
             padding: const EdgeInsets.all(12.0),
           ),
           RawMaterialButton(
@@ -213,35 +213,9 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
             fillColor: Colors.redAccent,
             padding: const EdgeInsets.all(15.0),
           ),
-          widget.call.isAudioCall
-              ? RawMaterialButton(
-                  onPressed: () {},
-                  child: const Icon(
-                    Icons.switch_camera,
-                    color: Colors.transparent,
-                    size: 20.0,
-                  ),
-                  // Icon
-                  shape: const CircleBorder(),
-                  elevation: 0,
-                  fillColor: Colors.transparent,
-                  padding: const EdgeInsets.all(12.0),
-                )
-              : RawMaterialButton(
-                  onPressed: () {
-                    _engine!.switchCamera();
-                  },
-                  child: const Icon(
-                    Icons.switch_camera,
-                    color: Colors.blueAccent,
-                    size: 20.0,
-                  ),
-                  // Icon
-                  shape: const CircleBorder(),
-                  elevation: 2.0,
-                  fillColor: Colors.white,
-                  padding: const EdgeInsets.all(12.0),
-                )
+          SizedBox(
+            width: Get.width * .2,
+          )
         ],
       ), // Row
     );
@@ -333,9 +307,9 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
                     children: <Widget>[
                       CirculeImageAvatar(
                         color: black,
-                        imageUrl:
-                        widget.call.receiverId==callController.myUid?
-                        widget.call.callerPic:widget.call.receiverPic,
+                        imageUrl: widget.call.receiverId == callController.myUid
+                            ? widget.call.callerPic
+                            : widget.call.receiverPic,
                         width: Get.width * .3,
                         openImageViewer: false,
                       ),
@@ -382,7 +356,15 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
                     ],
                   ),
                 )
-              : SizedBox()
+              : SizedBox(
+                  child: Center(
+                    child: widget.call.callerId != callController.myUid
+                        ? CircularProgressIndicator(
+                            color: mainColor2,
+                          )
+                        : SizedBox(),
+                  ),
+                )
         ]),
       ),
 

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -16,21 +19,52 @@ class MainController extends GetxController {
   var allUsersList = <UserModel>[].obs;
   var searchList = <UserModel>[].obs;
   RxBool isSearching = false.obs;
+  RxBool internetStatus = false.obs;
+  Connectivity _connectivity = Connectivity();
+  late StreamSubscription _streamSubscription;
+
+  // void checkConnectivity() async {
+  //   var connectionResult = await _connectivity.checkConnectivity();
+  //
+  //   if (connectionResult == ConnectivityResult.mobile) {
+  //     internetStatus = "MobileData";
+  //   } else if (connectionResult == ConnectivityResult.wifi) {
+  //     internetStatus = "Wifi";
+  //   } else {
+  //     internetStatus = "Not Connected";
+  //   }
+  //
+  // }
+
+  void checkRealtimeConnection() {
+    _streamSubscription = _connectivity.onConnectivityChanged.listen((event) {
+      if (event == ConnectivityResult.mobile) {
+        internetStatus.value = true;
+      } else if (event == ConnectivityResult.wifi) {
+        internetStatus.value = true;
+      } else if (event == ConnectivityResult.none) {
+        internetStatus.value = false;
+      } else {
+        internetStatus.value = false;
+      }
+    });
+  }
 
   @override
   void onInit() async {
     await GetStorage.init();
     getUserData();
     getAllUsers();
+    checkRealtimeConnection();
+
     super.onInit();
   }
 
-  // @override
-  // void dispose(){
-  //   searchTextController.dispose();
-  //   searchTextController.clear();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _streamSubscription.cancel();
+    super.dispose();
+  }
 
   getUserData() async {
     await FireStoreMethods()

@@ -164,13 +164,13 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             },
             child: Icon(
               muted ? Icons.mic_off : Icons.mic,
-              color: muted ? Colors.white : Colors.blueAccent,
+              color: muted ?  white : mainColor2,
               size: 20.0,
             ),
             // Icon
             shape: const CircleBorder(),
             elevation: 2.0,
-            fillColor: muted ? Colors.blueAccent : Colors.white,
+            fillColor: muted ? mainColor2 :  white,
             padding: const EdgeInsets.all(12.0),
           ),
           RawMaterialButton(
@@ -183,7 +183,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             },
             child: const Icon(
               Icons.call_end,
-              color: Colors.white,
+              color:  white,
               size: 35.0,
             ),
             // Icon
@@ -198,7 +198,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             },
             child: const Icon(
               Icons.switch_camera,
-              color: Colors.blueAccent,
+              color: mainColor2,
               size: 20.0,
             ),
             // Icon
