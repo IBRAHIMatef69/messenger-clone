@@ -171,7 +171,7 @@ class ChatScreen extends StatelessWidget {
                                           await messagesController.deleteMessage(
                                               chatRoomId,
                                               {
-                                                "lastMessage": "_",
+                                                "lastMessage": " ",
                                                 "lastMessageSenderUid":
                                                 messagesController
                                                     .messagesList[index].senderId
