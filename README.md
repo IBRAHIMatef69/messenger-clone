@@ -4,7 +4,7 @@ A new Flutter project.
 
 ## Getting Started
 
-Fuuly functionaly messenger clone with firebase as a database and agora for videp abd audio calls.
+Fuuly functionaly messenger clone with firebase as a database Supports multimedia messages and agora for video abd audio calls.
 
 A few resources to get you started if this is your first Flutter project:
 
