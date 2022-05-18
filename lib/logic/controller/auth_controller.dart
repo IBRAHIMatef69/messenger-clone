@@ -13,7 +13,7 @@ import '../../routes/routes.dart';
 import '../../utils/constants.dart';
 import '../../utils/my_string.dart';
 
-class AuthController extends GetxController {
+class AuthController extends GetxController   {
   FirebaseAuth auth = FirebaseAuth.instance;
   RxBool isLoading = false.obs;
 

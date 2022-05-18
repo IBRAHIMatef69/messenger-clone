@@ -1,4 +1,4 @@
-package com.example.store_user
+package com.chat.store_user
 
 import io.flutter.embedding.android.FlutterActivity
 

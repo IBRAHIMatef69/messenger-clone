@@ -232,7 +232,8 @@ class MessagesController extends GetxController {
     if (pickedFile != null) {
       try {
         video = await File(pickedFile.path);
-        Get.back();        Fluttertoast.showToast(
+        Get.back();
+        Fluttertoast.showToast(
             gravity: ToastGravity.TOP,
             msg: "video Picked successfully",
             backgroundColor: Colors.green);
@@ -451,7 +452,8 @@ class MessagesController extends GetxController {
           messageId = "";
           update();
         }
-      }).catchError((onError) {isSending.value=false;
+      }).catchError((onError) {
+        isSending.value = false;
         Fluttertoast.showToast(
             gravity: ToastGravity.TOP,
             msg: "${onError}",
@@ -488,10 +490,12 @@ class MessagesController extends GetxController {
           msg: "Deleted successfully",
           backgroundColor: Colors.red.shade400);
       FireStoreMethods().updateLastMessageSend(chatRoomId, lastMessageInfoMap);
-    }).catchError((onError){        Fluttertoast.showToast(
-        gravity: ToastGravity.TOP,
-        msg: "${onError}",
-        backgroundColor: Colors.red);});
+    }).catchError((onError) {
+      Fluttertoast.showToast(
+          gravity: ToastGravity.TOP,
+          msg: "${onError}",
+          backgroundColor: Colors.red);
+    });
   }
 
   ////////////////////////////////////

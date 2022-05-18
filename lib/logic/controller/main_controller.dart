@@ -19,7 +19,7 @@ class MainController extends GetxController {
   var allUsersList = <UserModel>[].obs;
   var searchList = <UserModel>[].obs;
   RxBool isSearching = false.obs;
-  RxBool internetStatus = false.obs;
+  RxBool internetStatus = true.obs;
   Connectivity _connectivity = Connectivity();
   late StreamSubscription _streamSubscription;
 
