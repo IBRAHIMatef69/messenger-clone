@@ -44,7 +44,7 @@ dependencies:
   get_storage: ^2.0.3
   file_picker: ^4.5.1
   get:
-  google_sign_in: ^5.2.4
+  google_sign_in:
   better_player: ^0.0.81
   lottie:
   intl:

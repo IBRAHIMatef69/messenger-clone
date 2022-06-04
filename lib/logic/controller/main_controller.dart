@@ -74,7 +74,7 @@ class MainController extends GetxController {
         .listen((event) {
       //userInfoModel.value = null;
       userInfoModel.value = UserModel.fromMap(event);
-      //  update();
+       update();
     });
   }
 

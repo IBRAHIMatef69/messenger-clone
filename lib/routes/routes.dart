@@ -27,7 +27,7 @@ class Routes {
   static const loginScreen = "/loginScreen";
   static const forgotPassword = "/forgotPassword";
   static const settingProfileScreen = "/settingProfileScreen";
-  static const allUsersScreen = "/allUsersScreen";
+  static const allUsersScreen = "/almlUsersScreen";
   static const chatScreen = "/chatScreen";
   static const addStatusScreen = "/addStatusScreen";
   static const viewStatusScreen = "/viewStatusScreen";
