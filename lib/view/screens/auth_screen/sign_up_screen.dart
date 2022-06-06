@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:store_user/view/widgets/auth/check_widget.dart';
 import 'package:store_user/view/widgets/utils_widgets/text_utils.dart';
 
 import '../../../logic/controller/auth_controller.dart';
@@ -29,7 +30,6 @@ class SignUpScreen extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: homeBackGroundColor,
-
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -213,25 +213,42 @@ class SignUpScreen extends StatelessWidget {
                         );
                       },
                     ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CheckWidget(),
+                      ],
+                    ),
                     SizedBox(
-                      height: Get.height*.07,
+                      height: Get.height * .065,
                     ),
 
                     Obx(
                       () {
                         return AuthButton(
                             onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                String name = nameController.text;
+                              if (controller.isChecked) {
+                                if (formKey.currentState!.validate()) {
+                                  String name = nameController.text;
 
-                                String email = emailController.text.trim();
-                                String password = passwordController.text;
-                                String phoneNumber = phoneController.text;
-                                controller.patientSignUpUsingFirebase(
-                                  name: name,
-                                  email: email,
-                                  password: password,
-                                  phoneNumber: phoneNumber,
+                                  String email = emailController.text.trim();
+                                  String password = passwordController.text;
+                                  String phoneNumber = phoneController.text;
+                                  controller.patientSignUpUsingFirebase(
+                                    name: name,
+                                    email: email,
+                                    password: password,
+                                    phoneNumber: phoneNumber,
+                                  );
+                                }
+                              } else {
+                                Get.defaultDialog(
+                                  title: "Privacy policy",
+                                  content: Text("Please accept Privacy policy"),
+                                  textCancel: "Ok",
                                 );
                               }
                             },
@@ -249,7 +266,7 @@ class SignUpScreen extends StatelessWidget {
                                     child: CircularProgressIndicator(
                                       color: mainColor,
                                     )),
-                            width: Get.width*.7);
+                            width: Get.width * .7);
                       },
                     ),
 
@@ -262,8 +279,16 @@ class SignUpScreen extends StatelessWidget {
                     ),
                     GoogleAuthImage(
                       onPressed: () {
-                        controller.clearImage();
-                        controller.googleSignupApp();
+                        if (controller.isChecked) {
+                          controller.clearImage();
+                          controller.googleSignupApp();
+                        } else {
+                          Get.defaultDialog(
+                            title: "Privacy policy",
+                            content: Text("Please accept Privacy policy"),
+                            textCancel: "Ok",
+                          );
+                        }
                       },
                     ),
                     SizedBox(

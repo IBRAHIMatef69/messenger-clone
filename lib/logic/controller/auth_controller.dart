@@ -20,7 +20,7 @@ class AuthController extends GetxController   {
   ////////////////////////////////////////////////
   final GetStorage authBox = GetStorage();
   var googleSignin = GoogleSignIn();
-
+  bool isChecked = false;
   var patientGender = "".obs;
   String gender = "Gender";
 
@@ -34,6 +34,10 @@ class AuthController extends GetxController   {
     update();
   }
 
+  void checked() {
+    isChecked = !isChecked;
+    update();
+  }
   ////////////////////////////getting user image//////////////////////////////////////////////////
 
   final ImagePicker picker = ImagePicker();

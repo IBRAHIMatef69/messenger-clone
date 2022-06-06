@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:store_user/view/widgets/auth/check_widget.dart';
 import 'package:store_user/view/widgets/utils_widgets/text_utils.dart';
 import '../../../logic/controller/auth_controller.dart';
 import '../../../routes/routes.dart';
@@ -25,7 +26,6 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: homeBackGroundColor,
-
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: SingleChildScrollView(
@@ -42,17 +42,17 @@ class LoginScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: Row(
                   children: [
-                    Icon(IconBroken.Chat),     SizedBox(
+                    Icon(IconBroken.Chat),
+                    SizedBox(
                       width: Get.width * .05,
-                    ),  KTextUtils(
+                    ),
+                    KTextUtils(
                       text: "Start a new conversation",
                       size: 17,
                       color: black,
                       fontWeight: FontWeight.normal,
                       textDecoration: TextDecoration.none,
                     ),
-
-
                   ],
                 ),
               ),
@@ -132,16 +132,20 @@ class LoginScreen extends StatelessWidget {
                           );
                         },
                       ),
+                      const SizedBox(
+                        height: 5,
+                      ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          CheckWidget(),
                           TextButton(
                               onPressed: () {
                                 Get.toNamed(Routes.forgotPassword);
                               },
                               child: KTextUtils(
                                 text: "Forget Password",
-                                size: 16,
+                                size: Get.width * .03,
                                 color: black,
                                 fontWeight: FontWeight.w400,
                                 textDecoration: TextDecoration.underline,
@@ -162,11 +166,19 @@ class LoginScreen extends StatelessWidget {
                   GetBuilder<AuthController>(builder: (_) {
                     return AuthButton(
                         onPressed: () {
-                          if (form.currentState!.validate()) {
-                            String email = emailController.text.trim();
-                            String password = passwordController.text;
-                            controller.loginUsingFirebase(
-                                email: email, password: password);
+                          if (controller.isChecked) {
+                            if (form.currentState!.validate()) {
+                              String email = emailController.text.trim();
+                              String password = passwordController.text;
+                              controller.loginUsingFirebase(
+                                  email: email, password: password);
+                            }
+                          } else {
+                            Get.defaultDialog(
+                              title: "Privacy policy",
+                              content: Text("Please accept Privacy policy"),
+                              textCancel: "Ok",
+                            );
                           }
                         },
                         text: controller.isLoading == false
@@ -223,7 +235,15 @@ class LoginScreen extends StatelessWidget {
                 builder: (_) {
                   return GoogleAuthImage(
                     onPressed: () {
-                      controller.googleSignupApp();
+                      if (controller.isChecked) {
+                        controller.googleSignupApp();
+                      } else {
+                        Get.defaultDialog(
+                          title: "Privacy policy",
+                          content: Text("Please accept Privacy policy"),
+                          textCancel: "Ok",
+                        );
+                      }
                     },
                   );
                 },

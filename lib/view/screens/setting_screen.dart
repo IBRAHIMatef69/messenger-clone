@@ -12,12 +12,15 @@ import 'package:store_user/view/widgets/utils_widgets/text_utils.dart';
 
 import '../../logic/controller/main_controller.dart';
 import 'call_screens/answer_call/answer_call_wrap_layout.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingProfileScreen extends StatelessWidget {
   SettingProfileScreen({Key? key}) : super(key: key);
   final controller1 = Get.find<AuthController>();
 
   final controller = Get.find<MainController>();
+  final Uri _url = Uri.parse('https://play.google.com/store/apps/details?id=com.chat.store_user');
+  final Uri _url1 = Uri.parse('https://www.termsfeed.com/live/431fb5e8-b1ce-461e-b049-111211ed08ca');
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +106,10 @@ class SettingProfileScreen extends StatelessWidget {
               const SizedBox(height: 20),
               buildTextButtonIcon(
                 backColor: white,
-                onPressed: () {},
+                onPressed: () async {
+                  if (!await launchUrl(_url)) throw 'Could not launch $_url';
+
+                },
                 icon: Icons.messenger_outline_outlined,
                 iconColor: Colors.black,
                 label: '  Invite a friend   ',
@@ -112,7 +118,10 @@ class SettingProfileScreen extends StatelessWidget {
               const SizedBox(height: 20),
               buildTextButtonIcon(
                 backColor: white,
-                onPressed: () {},
+                onPressed: () async {
+                  if (!await launchUrl(_url1)) throw 'Could not launch $_url';
+
+                },
                 icon: Icons.help,
                 iconColor: Colors.black,
                 label: '  Help    ',
