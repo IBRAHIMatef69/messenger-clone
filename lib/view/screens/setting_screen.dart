@@ -20,7 +20,7 @@ class SettingProfileScreen extends StatelessWidget {
 
   final controller = Get.find<MainController>();
   final Uri _url = Uri.parse('https://play.google.com/store/apps/details?id=com.chat.store_user');
-  final Uri _url1 = Uri.parse('https://www.termsfeed.com/live/431fb5e8-b1ce-461e-b049-111211ed08ca');
+  final Uri _url1 = Uri.parse('https://sites.google.com/view/chatenger/%D8%A7%D9%84%D8%B5%D9%81%D8%AD%D8%A9-%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3%D9%8A%D8%A9');
 
   @override
   Widget build(BuildContext context) {
