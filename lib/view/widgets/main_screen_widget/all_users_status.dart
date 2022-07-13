@@ -3,14 +3,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:store_user/logic/controller/chat_rooms_controller.dart';
 import 'package:store_user/logic/controller/status_controller.dart';
-import 'package:store_user/utils/constants.dart';
-import 'package:store_user/view/widgets/main_screen_widget/friends_cerculer_avatar.dart';
+
 import 'package:store_user/view/widgets/main_screen_widget/status_widget.dart';
-import 'package:store_user/view/widgets/utils_widgets/text_utils.dart';
+
 
 import '../../../logic/controller/main_controller.dart';
-import '../../../routes/routes.dart';
-import 'add_status_widget.dart';
+ import 'add_status_widget.dart';
 
 class OnlineUsersChat extends StatelessWidget {
   final statusController = Get.put(StatusController());
